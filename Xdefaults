@@ -1,0 +1,135 @@
+
+
+URxvt*.transparent: true
+! URxvt*.shading: 0 to 99 darkens, 101 to 200 lightens
+URxvt*.shading: 30
+
+!URxvt.multichar_encoding:utf-8
+
+URxvt*loginShell: true
+
+URxvt.preeditType:Root
+URxvt.inputMethod:ibus
+URxvt.depth:32
+URxvt.background:[90]#000000
+URxvt.foreground:#ffffff
+URxvt.colorBD:Gray95
+URxvt.colorUL:Green
+URxvt.color1:Red2
+URxvt.color4:RoyalBlue
+URxvt.color5:Magenta2
+URxvt.color8:Gray50
+URxvt.color10:Green2
+URxvt.color12:DodgerBlue
+URxvt.color14:Cyan2
+URxvt.color15:Gray95
+URxvt.scrollBar:false
+URxvt.scrollBar_right:True
+URxvt.scrollBar_floating:True
+URxvt.scrollstyle:plain
+URxvt.mouseWheelScrollPage:False
+URxvt.scrollTtyOutput:False
+URxvt.scrollWithBuffer:True
+URxvt.scrollTtyKeypress:True
+URxvt.cursorBlink:True
+URxvt.saveLines:10000
+URxvt.borderLess:False
+Xft.dpi:96
+Xft*antialias:        True
+Xft*hinting:          Full
+
+! Using XLFD (created via e.g. xfontsel)
+!URxvt*font: -misc-fixed-medium-r-semicondensed-*-12-90-100-*-c-60-iso8859-1
+!Urxvt*font: -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1,xft:AR PL SungtiL GB:size=10
+! ! Using Xft
+!URxvt*font: xft:DejaVu Sans Mono:size=8
+!URxvt*font: xft:AR PL SungtiL GB:size=10
+!URxvt.font: -nil-profont-medium-r-normal--11-110-72-72-c-60-iso8859-1,xft:WenQuanYi Micro Hei Mono:style=Regular:pixelsize=11:antialias=true
+
+!URxvt.font:xft:Liberation Mono:pixelsize=14:antialias=false,xft:Microsoft Yahei:pixelsize=14
+!URxvt.boldFont:xft:Liberation Mono:pixelsize=14:antialias=false:Bold,xft:Microsoft Yahei:pixelsize=14:Bold
+
+!URxvt.font:xft:Bitstream Vera Sans Mono-12,xft:Microsoft Yahei:pixelsize=16
+!URxvt.boldFont:xft:Bitstream Vera Sans Mono-12:Bold,xft:Microsoft Yahei:pixelsize=16:Bold
+!URxvt*font: xft:DejaVu Sans Mono:size=8,xft:AR PL SungtiL GB:size=10
+URxvt.font: xft:DejaVu Sans Mono:size=8,xft:AR PL SungtiL GB:size=10
+!xft:Bitstream Vera Sans Mono-12
+
+URxvt.perl-ext-common:default,clipboard,matcher,keyboard-select
+URxvt.keysym.M-u:     perl:url-select:select_next
+URxvt.url-launcher: /usr/bin/firefox-bin
+URxvt.matcher.button:1
+
+
+URxvt.underlineURLs:  True
+URxvt.matcher.button: 1 
+URxvt.keysym.M-Escape:perl:keyboard-select:activate
+URxvt.keysym.M-c:     perl:clipboard:copy
+URxvt.keysym.M-v:     perl:clipboard:paste
+URxvt.keysym.M-C-v:   perl:clipboard:paste_escaped
+!URxvt.copyCommand:   xsel -ib
+!URxvt.pasteCommand:  xsel -ob
+!
+!
+!
+!
+
+
+
+
+ckground: #0f0f0f
+*foreground: #c8c8c8
+
+!black
+*color0:  #251f1f
+*color8:  #5e5e5e
+!red
+*color1:  #eb4509
+*color9:  #eb4509
+!green
+*color2:  #94e76b
+*color10: #95e76b
+!yellow
+*color3:  #ffac18
+*color11: #ffac18
+!blue
+*color4:  #46aede
+*color12: #46aede
+!magenta
+*color5:  #e32c57
+*color13: #e32c57
+!cyan
+*color6:  #d6dbac
+*color14: #d6dbac
+!white
+*color7:  #efefef
+*color15: #efefef
+
+
+
+
+
+URxvt*vim-scrollback: M-s
+URxvt*vim-scrollback-paste: M-p
+URxvt*vim-scrollback-bg: 16
+URxvt*vim-scrollback-fg: 10
+
+
+
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+URxvt.keysym.C-S-Down: perl:font-size:decglobal
+URxvt.font-size.step: 4
+
+
+
+Xcursor.theme: gentoo-blue
+Xcursor.size: 24
+
+
+URxvt.inputMethod:SCIM
+URxvt.imLocale:zh_CN.utf8
+URxvt.imFont:Microsoft Yahei
+URxvt.imFont:xft:DejaVu Sans Mono:size=8
+!URxvt.preeditType: Root
