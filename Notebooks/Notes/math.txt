@@ -1,0 +1,7 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-02-07T17:51:30+08:00
+
+====== math ======
+Created Tuesday 07 February 2017
+

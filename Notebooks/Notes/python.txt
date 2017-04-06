@@ -1,0 +1,16 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-08-21T10:33:49+08:00
+
+====== python ======
+Created Sunday 21 August 2016
+
+
+1. 速读的软件（APP)，可以参考IPHONE上面的速读的一些软件
+2. 背单词的一些软件
+3. 打地老鼠的游戏
+4. 系统的一些工作软件
+5. 读开源软件，一些比较火的框架（事件等）。
+	  可以先从小的软件研究与阅读
+
+

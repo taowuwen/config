@@ -1,0 +1,36 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-04T15:51:52+08:00
+
+====== make own linux distro ======
+Created Saturday 04 March 2017
+
+1. 内核编译
+2. 获取基本的文件系统，比如debian或者redhat的
+3. 启动，调试，得到一个基于cli的基本系统
+4. 安装gnome，xfce，kde或者lxde等图形环境
+5. 各种软件定制，安装。
+6. 记得改LOGO。
+7. 发行，不要忽视版权问题，否则容易被鄙视。 
+
+作者：cuizhaohua
+链接：https://www.zhihu.com/question/21373233/answer/74594355
+来源：知乎
+著作权归作者所有，转载请联系作者获得授权。
+
+
+
+http://www.thegeekstuff.com/2016/01/create-lxc-containers/
+
+
+
+
+http://www.2cto.com/os/201210/159170.html
+
+
+http://blog.chinaunix.net/uid-26524139-id-3051914.html
+
+http://blog.chinaunix.net/uid-311680-id-2439711.html
+http://soft.chinabyte.com/os/439/11375939.shtml
+
+https://help.ubuntu.com/community/LiveCDCustomization

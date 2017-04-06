@@ -1,0 +1,68 @@
+
+
+
+
+>>> Installing (2 of 2) dev-python/django-1.8.9::gentoo 
+* Additional Backend support can be enabled via 
+*   dev-python/mysql-python for MySQL backend support in python 2.7 only 
+*   dev-python/mysqlclient for MySQL backend support in python 2.7 - 3.4 
+*   dev-python/psycopg:2 for PostgreSQL backend support 
+* Other features can be enhanced by 
+*   sci-libs/gdal[geos] for GEO Django 
+*   dev-python/pylibmc for Memcached support 
+*   dev-python/python-memcached for Memcached support 
+*   dev-python/pillow for ImageField Support 
+*   dev-python/bcrypt for Password encryption 
+*   dev-python/django-formtools for High-level abstractions for Django forms 
+* A copy of the admin media is available to webapp-config for installation in a 
+* webroot, as well as the traditional location in python's site-packages dir 
+* for easy development.  
+* 
+* This ebuild does not support the 'vhosts' USE flag.  
+* This means that Portage will not automatically run webapp-config to 
+* complete the installation.  
+* 
+* To install django-1.8.9 into a virtual host, run the following command: 
+* 
+*     webapp-config -h <host> -d django -I django 1.8.9 
+* 
+* For more details, see the webapp-config(8) man page 
+
+>>> Recording dev-python/django in "world" favorites file...  
+* Messages for package app-admin/webapp-config-1.54-r1: 
+* webapp-config now requires that all -I/-U/-C commands be followed 
+* by the package name and package version of the webapp 
+* eg.) 'webapp-config -d drupal -I drupal 8.0.0_beta10' 
+* See 'man 8 webapp-config' for more information 
+* Messages for package dev-python/django-1.8.9: 
+* Additional Backend support can be enabled via 
+*   dev-python/mysql-python for MySQL backend support in python 2.7 only 
+*   dev-python/mysqlclient for MySQL backend support in python 2.7 - 3.4 
+*   dev-python/psycopg:2 for PostgreSQL backend support 
+* Other features can be enhanced by 
+*   sci-libs/gdal[geos] for GEO Django 
+*   dev-python/pylibmc for Memcached support 
+*   dev-python/python-memcached for Memcached support 
+*   dev-python/pillow for ImageField Support 
+*   dev-python/bcrypt for Password encryption 
+*   dev-python/django-formtools for High-level abstractions for Django forms 
+* A copy of the admin media is available to webapp-config for installation in a 
+* webroot, as well as the traditional location in python's site-packages dir 
+* for easy development.  
+* 
+* This ebuild does not support the 'vhosts' USE flag.  
+* This means that Portage will not automatically run webapp-config to 
+* complete the installation.  
+* 
+* To install django-1.8.9 into a virtual host, run the following command: 
+* 
+*     webapp-config -h <host> -d django -I django 1.8.9 
+* 
+* For more details, see the webapp-config(8) man page 
+
+>>> Auto-cleaning packages...  
+
+>>> No outdated packages were found on your system.  
+* GNU info directory index is up-to-date.  
+* IMPORTANT: 18 news items need reading for repository 'gentoo'.  
+* Use eselect news read to view new items.

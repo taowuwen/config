@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-02-11T18:51:51+08:00
+
+====== getpass ======
+Created Saturday 11 February 2017
+
+import getpass
+
+def login():
+	user = input("Username [%s]: " % getpass.getuser())
+	if not user:
+		user = getpass.getuser()
+
+	pprompt = lambda: (getpass.getpass(), getpass.getpass('Retype password: '))
+
+	p1, p2 = pprompt()
+	while p1 != p2:
+		print('Passwords do not match. Try again')
+		p1, p2 = pprompt()
+
+	return user, p1
+
+
+
+
+
+
+tww@u

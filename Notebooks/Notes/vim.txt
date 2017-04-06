@@ -1,0 +1,35 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-06T09:18:59+08:00
+
+====== vim ======
+Created Tuesday 06 December 2016
+
+Different character-encoding set different font
+
+
+特殊字符的输入：
+
+
+vim提供了digraphs
+
+[plain] view plain copy
+
+	:digraphs  
+	" or dig  
+	:dig  
+
+
+在--INSERT--下<CTRL> + K ，然后输入两个字母来完成对特殊字母的输入。
+
+如输入h*，得到的是θ
+
+
+cards
+
+U+2660 	U+2665 	U+2666 	U+2663
+♠ 	♥ 	♦ 	♣
+Black Spade Suit 	Black Heart Suit 	Black Diamond Suit 	Black Club Suit
+&spades; 	&hearts; 	&diams; 	&clubs;
+U+2664 	U+2661 	U+2662 	U+2667
+♤ 	♡ 	♢ 	♧

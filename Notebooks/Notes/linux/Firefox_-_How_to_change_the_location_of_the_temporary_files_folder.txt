@@ -1,0 +1,31 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-08-22T16:25:04+08:00
+
+====== Firefox - How to change the location of the temporary files folder ======
+Created Monday 22 August 2016
+
+http://ccm.net/faq/40745-firefox-how-to-change-the-location-of-the-temporary-files-folder
+
+
+Changing the location of Firefox's temporary files folder can be useful when your PC is equipped with a small SSD (60GB). Moving the temporary folder to another drive will help to prevent frequent writing on the SSD.
+Change the location of the temporary files folder
+Create a folder on the drive you want to use and name it as: Firefox_temp
+
+	Open Firefox.
+	Type the following in the address bar: about:config
+	Press enter to confirm
+	Search for the following entry: browser.cache.disk.parent_directory
+	If you can't find this entry, create it:
+	Name it as: browser.cache.disk.parent_directory
+	Right-click > New > String 
+
+	A window opens, type the following:
+		H:\\Firefox_temp\\
+
+	Where H is the drive containing the new temporary folder.
+	Close all windows and restart the browser.
+	Clean your PC using CCleaner or Wise Disk cleaner.
+	Given that the temporary files are now stored on another drive, some softwares won't be able to clear them.
+	You can manually clear the temp folder by going to H:\\Firefox_temp\\
+

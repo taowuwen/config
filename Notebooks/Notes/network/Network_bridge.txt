@@ -1,0 +1,157 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-14T23:33:31+08:00
+
+====== Network bridge ======
+Created Tuesday 14 March 2017
+
+This article discusses how to setup a network bridge in order to connect two portions of a network together.
+Contents
+
+	1 Introduction
+	2 Kernel
+	3 Installation
+	4 Host configuration
+		4.1 OpenRC
+		4.2 systemd
+			4.2.1 DHCP
+			4.2.2 Static
+	5 See also
+	6 External resources
+
+Introduction
+
+A network bridge can be used to connect two independent network segments at layer 2 level (much like a network switch). Common applications include transparent proxying, transparent filtering (using iptables) and saving money on hardware as some mainboards come with two PHY interfaces. In this article, enp1s0 and enp2s0 will be the network interfaces used but of course they can be replaced by whatever interface names are present on a system (such as eth0 and eth1).
+
+In order to create a bridge on Linux a special bridging device is created (brX) that contains at least two network devices as ports (e.g. ethX or pppX). As the bridge works on layer 2, no IP addresses are needed on the port devices — on a typical setup, the bridging device itself will receive the IP (e.g. via DHCP).
+Kernel
+KERNEL Enabling Ethernet Bridging
+
+[*] Networking support  --->
+   Networking options  --->
+	  <M> 802.1d Ethernet Bridging
+
+
+Installation
+Note
+With net-misc/netifrc >=0.4.0, the installation of net-misc/bridge-utils has been deprecated. The network bridge is set up simply by configuring it in /etc/conf.d/net (cf. #See also).
+
+But if you have older version of netifrc, or need it for some other reasons, install the net-misc/bridge-utils package to have access to the utilities needed to manage the bridge device:
+root #emerge --ask bridge-utils
+
+You need to do this with a console connection. You'll probably lose the ability to ssh into the box, if you are working on one of the ports being affected.
+
+Make certain the physical Ethernet interfaces you are working on are not in {{Path}/etc/conf.d/}} as symbolic links as part of your original install:
+root #rc-update delete net.enp1s0 boot
+root #rc-update delete net.enp2s0 boot
+root #rm /etc/init.d/net/enp2s0
+root #rm /etc/init.d/net/enp1s0
+
+It's always best to learn how to do things first by hand, then you can automate it. brctl has been around forever. This is a layer 2 connection you are creating, and as such, you do not need IP addresses assigned to the physical ports. The bridged physical interfaces (enp1s0 and enp2s0 in the below example) are put into promiscuous mode, so they will not be able to receive an IP address (e.g. via dhcp). The bridge will also not function properly if static IP addresses are forced on the interfaces.
+root #brctl
+
+The above command shows all the nice commands available. Now create a bridge with no interfaces assigned (yet):
+root #brctl addbr br0
+
+Add the two interfaces to the bridge:
+root #brctl addif br0 enp1s0
+root #brctl addif br0 enp2s0
+
+See what you've done:
+root #brctl show
+
+Note that stp does not get turned on, unless you specify that that is what you want.
+Host configuration
+OpenRC
+
+First, the bridge device must be added to the /etc/conf.d/net file. As an example, bridge configuration with DHCP:
+FILE /etc/conf.d/netAdd bridge device example
+
+# Set up the initial layer 2 bridge interface
+bridge_br0="enp1s0 enp2s0"
+
+# bridge
+config_br0="192.168.26.199 netmask 255.255.255.0"
+routes_br0="default via 192.168.26.254"
+
+bridge_forward_delay_br0=0
+bridge_hello_time_br0=1000
+
+Note
+It is important to include bridge_forward_delay_br0=0 and bridge_hello_time_br0=1000 in the /etc/conf.d/net file in order to bring the bridge interface up quickly. Other values will cause network packets to be dropped for the first 30 seconds after the bridge has become active. This, in turn, could prevent DHCP from working as intended.
+
+More documentation can be found by reading /usr/share/doc/netifrc-*/net.example.bz2
+
+Next, create the init script by linking net.lo to net.br0 and start the interface as follows:
+root #ln -s /etc/init.d/net.lo /etc/init.d/net.br0
+root #rc-service net.br0 start
+
+Finally, to make sure the bridge is automatically set up on subsequent boots add the newly generated init script to the system's default run level:
+root #rc-update add net.br0 default
+systemd
+
+As of systemd 210 and up, a special service called systemd-networkd is available for network configuration. This service can handle bridge construction.
+
+The basic procedure of creating a network configuration with systemd-networkd is creating several .network and .netdev files.
+
+First, create a bridge. With systemd-networkd this is as simple as creating a new .netdev file:
+FILE /etc/systemd/network/MyBridge.netdevSystemd-networkd example
+
+[NetDev]
+Name=br0
+Kind=bridge
+
+
+After the bridge definition is created, assign the interfaces to the bridge:
+FILE /etc/systemd/network/MyEth.networkInterface assignment example
+
+[Match]
+Name=eth*
+
+[Network]
+Bridge=br0
+
+
+Multiple interfaces can be matched and attached to the bridge.
+
+Notice that this bridge is still not active. Activation can be achieved by creating a .network definition to use the bridge.
+DHCP
+FILE /etc/systemd/network/MyBridge.networkDHCP configuration
+
+[Match]
+Name=br0
+
+[Network]
+DHCP=v4
+
+
+Static
+FILE /etc/systemd/network/MyBridge.networkStatic configuration
+
+[Match]
+Name=br0
+
+[Network]
+DNS=192.168.1.1
+Address=192.168.1.2/24
+Gateway=192.168.1.1
+
+
+Defining a gateway is only necessary if one intends to use the physical network interface as access to another network. When using the bridge as a private network, omit it as systemd-networkd will add the bridge as a default route when the Gateway option is set.
+
+Do remember to enable and start the systemd-networkd service.
+See also
+
+	Netifrc/Brctl_Migration
+	Iproute2
+
+External resources
+
+	Official Linux network bridge documentation.
+	Generic Linux network bridge how-to.
+	Article on the inofficial gentoo wiki with VLAN and IPtables examples.
+	Creating a bridge with NetworkManager.
+
+Category:
+
+	Network management

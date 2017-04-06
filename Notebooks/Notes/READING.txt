@@ -1,0 +1,173 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-08-20T22:41:53+08:00
+
+====== READING ======
+Created Saturday 20 August 2016
+
+http://www.wikihow.com/Learn-Speed-Reading
+http://www.wikihow.com/Learn-Speed-Reading
+
+
+Expert Reviewed
+How to Learn Speed Reading
+
+Three Parts:Learning to Speed ReadSkimming TextTiming Your Reading SpeedCommunity Q&A
+
+Whether you're hitting the textbooks in philosophy class or reading the morning newspaper, reading can feel tedious. Train yourself to speed read to get through these tasks much faster. Reading faster does lead to less understanding, but with practice you can overcome some of this effect.
+Part 1
+Learning to Speed Read
+
+	Image titled Learn Speed Reading Step 1
+	1
+	Stop talking to yourself. Almost every reader "subvocalizes," or moves their throat as they imagine speaking the words.[1] This may help the reader remember concepts, but it's also a major barrier to speed.[2][3] Here are a few ways to keep this habit to a minimum:
+		Chew gum or hum while you read. This occupies muscles used to subvocalize.
+		If you move your lips as you read, hold a finger against them.
+	Image titled Learn Speed Reading Step 2
+	2
+	Cover words you've already read. When reading, your eyes often move back to earlier words. Most of the time, these are short movements that probably don't improve understanding.[4] Use an index card to cover words right after you read them, training yourself not to overuse this habit.
+		These "regressions" also happen when you've failed to understand something. If your eyes jump several words or lines back, that's a sign that you may need to slow down.
+	Image titled Learn Speed Reading Step 3
+	3
+	Understand eye movements. While reading, your eyes move jerkily, stopping on some words and skipping others. You can only read while your eyes are stopped. If you learn to make fewer movements per line, you'll read a lot faster. But be careful – research reveals limits to how much English readers can see at once:[5]
+		You can read eight letters to the right of your eye position, but only four to the left. This is roughly two or three words at a time.
+		You notice letters 9–15 spaces to the right, but can't read them clearly.
+		Normal readers don't process words on other lines. Training yourself to skip lines and still understand them would be very difficult.
+	Image titled Learn Speed Reading Step 4
+	4
+	Train your eyes to make fewer movements. Your brain normally decides where to move your eyes based on how long or familiar the next words look.[6] You can read faster if you train your eyes to move to specific places on the page instead. Try this exercise:[7]
+		Place an index card over a line of text.
+		Write an X on the card, over the first word.
+		Write another X on the same line. Place it three words further for good understanding, five words for easy texts, or seven words to skim the main points.
+		Write more Xs at the same spacing, until you reach the end of the line.
+		Read quickly as you move the index card down, trying to only focus your eyes just below each X.
+	Image titled Learn Speed Reading Step 5
+	5
+	Set a pace faster than you can understand. Many programs claim to increase your reading speed by training your reflexes first, then practicing until your brain can catch up. This has not been thoroughly studied. It certainly increases the speed you move through the text, but you may understand little or nothing. Try this if you want to aim for extreme speed reading, and you might understand more after a few days of practice. Here's how:
+		Move a pencil along the text. Time this so you can say "one one thousand" at a calm pace and finish just as you reach the end of a line.
+		Spend two minutes trying to read at the pace of the pencil. Even if you can't understand anything, stay focused on the text and keep your eyes moving for the entire two minutes.
+		Rest for a minute, then go even faster. Spend three minutes trying to read at the pace of a pen that moves across two lines every time you say "one one thousand".
+	Image titled Learn Speed Reading Step 6
+
+	spaceplay / pause
+
+	escstop
+
+	ffullscreen
+
+	shift + ←→slower / faster (latest Chrome and Safari)
+
+	↑↓volume
+
+	mmute
+
+	←→seek
+
+	 . seek to previous
+
+	12…6 seek to 10%, 20%, …60%
+	to Learn Speed Reading
+	6
+	Try RSVP software. If you can't reach your goals with the techniques above, try RSVP, or Reading Rapid Serial Visual Presentation. In this approach, the phone app or computer software flashes text a single word at a time. This lets you choose any reading speed you like. Raise it too high, though, and you won't be able to remember a large percentage of the words.[8] This may be useful to get a rapid summary of a news article, but not when studying or reading for fun.
+
+Part 2
+Skimming Text
+
+	Image titled Learn Speed Reading Step 7
+	1
+	Know when to skim. Skimming can be used to gain a shallow understanding of a text. It can be used to scan a newspaper for interesting material, or to get the important concepts out of a textbook in preparation for a test. It's not a good replacement for thorough reading.
+	Image titled Learn Speed Reading Step 8
+	2
+	Read titles and section headings. Begin by only reading the chapter titles and any subheadings at the start of large sections. Read the headlines of each newspaper article, or the table of contents in a magazine.[9]
+	Image titled Learn Speed Reading Step 9
+	3
+	Read the beginning and end of a section. Textbooks usually contain introductions and summaries of each chapter. For other texts, just read the first and last paragraph of a chapter or article.
+		You can read quickly if you're familiar with the subject, but don't try to speed read as fast as possible. You're saving time by skipping most of the section, but you do need to understand what you're reading.
+	Image titled Learn Speed Reading Step 10
+	4
+	Circle important words throughout the text. If you still wish to learn more, brush your eyes rapidly across the page rather than reading normally. Now that you know the gist of the section, you can pick out key words that mark important areas. Stop and circle the following words:[10]
+		Words that are repeated several times
+		The main ideas – often including words from the title or section header
+		Proper nouns
+		Italics, bold text, or underline
+		Words you don't recognize
+	Image titled Learn Speed Reading Step 11
+	5
+	Examine pictures and diagrams. These often present a lot of information without much reading required. Take a minute or two to make sure you fully understand each diagram.
+	Image titled Learn Speed Reading Step 12
+	6
+	Read the first sentence of each paragraph, if confused. If you've lost track of the subject, read the start of each paragraph. The first one or two sentences will teach you the main points.[11]
+	Image titled Learn Speed Reading Step 13
+	7
+	Study using your annotations. Go back and look over the words you've circled. Can you "read" these and get a general sense of what the text is about? If you get confused at a certain word, try reading a few sentences around that word to remind yourself of the topic. Circle additional words as you do this.
+
+Part 3
+Timing Your Reading Speed
+
+	Image titled Learn Speed Reading Step 14
+	1
+	Time your reading speed. Track your progress by timing yourself daily, or each time you try these exercises. Trying to beat your best speed can provide great motivation. Here's how to time your reading in words per minute (wpm):[12]
+		Count the number of words on a page, or count the number in one line and multiply by the number of lines on the page.
+		Set a timer for ten minutes and see how much you can read in that time.
+		Multiply the number of pages you read by the number of words per page. Divide by ten to get your words per minute.
+		You can use an online "speed reading test," but you will probably read at a different pace on a screen than on a printed page.[13]
+	Image titled Learn Speed Reading Step 15
+	2
+	Set yourself goals. Your reading speed should improve if you repeat one or more of these exercises daily. Many people can double their reading speed after several weeks. Set yourself milestones to motivate yourself to keep practicing:
+		200–250 words per minute is the expected reading speed for someone age 12 or older.[14]
+		300 wpm is the reading speed of the average college student.
+		At 450 wpm, you're reading as fast as a college student skimming for the main points. Ideally, you can do this with almost total comprehension.
+		At 600–700 wpm, you're reading as fast as a college student scanning to find a word. Most people can learn to read at this speed with about 75% of their normal comprehension.[15]
+		At 1,000 wpm and above, you're reaching the level of competitive speed readers. This usually requires extreme techniques that skip over most of the text. Most people can't remember much at this speed.
+
+Community Q&A
+
+	Can I learn to speed read to improve my online reading and comprehension?
+	wikiHow Contributor
+	Yes, it works all the same. However, remembering and understanding each word you read should be top priority as a reader. Make sure that you're reading at your pace, and practicing it deliberately will help you.
+	Flag as duplicate
+	Not Helpful 2 Helpful 11
+	I want to read 300 words per minute. What can I do to achieve my goal?
+	wikiHow Contributor
+	If you quickly scan 50 words per second, 300 words a minute will be no problem. The key is to focus half on understanding and the other is to read whole lines at a time.
+	Flag as duplicate
+	Not Helpful 2 Helpful 2
+	Can I train my brain to read more than 17,000 wpm?
+	wikiHow Contributor
+	Probably not. Claiming to be able to read that fast is extremely rare. In the movie, "Rain Man," the title character could read up to 20,000 words a minute. His left eye read the left page, right eye read the right page, but that is something very rare. It is not associated with neurotypical people.
+	Flag as duplicate
+	Not Helpful 0 Helpful 0
+
+Unanswered Questions
+
+	How can I learn to understand what I have read better?
+	Answer this question Flag as...
+	Is there a method to improve comprehension?
+	Answer this question Flag as...
+
+Show more unanswered questions
+Ask a Question
+Submit
+Tips
+
+	Take a break every 30–60 minutes. This will keep you focused and reduce eye strain.
+	Practice in a quiet, well-lit environment. Use earplugs if necessary.
+	Analysing and changing your reading can become difficult because you start focusing on your reading techniques rather than understanding the text. Make sure you're not reading too fast and you properly understand what you have read.
+	Read important texts when you're alert and well-rested. Some people function well in the morning, while others think better in the afternoon.
+	If you can't improve your reading speed, have your vision checked.
+	Holding the page further away will probably not speed up reading. Most people automatically adjust to the distance that allows maximum speed.[16]
+	"Zig zag" exercises that try to get your eye to move left-to-right-to-left probably don't work. Most people who train this way still move their eyes left-to-right, line by line.[17]
+
+Warnings
+
+	After a point, reading faster will always have a trade-off in less comprehension or worse memory of the text.
+	Beware of expensive speed reading products. Many of them offer similar advice and exercises, or exercises not backed up by research.
+
+Thiangs You'll Need
+	↑ http://www.mindtools.com/speedrd.html
+	↑ http://www.amsciepub.com/doi/abs/10.2466/pr0.1989.65.2.487?journalCode=pr0
+	↑ http://www.sciencedirect.com/science/article/pii/S0022537180906283
+
+
+
+

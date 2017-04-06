@@ -1,0 +1,131 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-08-21T22:55:00+08:00
+
+====== How to set encoding in gedit 3.2 ======
+Created Sunday 21 August 2016
+
+up vote
+13
+down vote
+favorite
+6
+	
+
+I can not display file coded with GBK. In gconf-editor of gnome 3.2 , I can not find encoding item of gedit . How to set it ? thanks
+gedit
+shareimprove this question
+	
+asked Jan 24 '12 at 8:39
+waterloo2005
+71751736
+	
+   	 
+	
+What is the output of locale and locale -a? – enzotib Jan 24 '12 at 8:58
+add a comment
+2 Answers
+active
+oldest
+votes
+up vote
+25
+down vote
+accepted
+	
+
+I don't have a file encoded in GBK to test the solutions, but do try them.
+
+Option 1: Run gedit and then open the file:
+
+	run gedit
+
+	click open
+
+	select in the encoding combo "add" and add GB18030 (or GBK)
+
+	select that encoding in the combo
+
+	select the file
+
+Option 2:
+
+	install and run gconf-editor
+
+	Find /apps/gedit-2/preferences/encoding key "auto_detected" and set it to:
+
+	[CURRENT,GB18030,GBK,GB2312,UTF-8,UTF-16]
+
+Remember to backup the previous value of auto_detected!!
+
+Option 3: Using dconf (the "newer" gconf, used in ubuntu)
+
+dconf read /org/gnome/gedit/preferences/encodings/auto-detected
+
+Save the result (backup)!
+
+dconf write /org/gnome/gedit/preferences/encodings/auto-detected "['CURRENT', 'GBK', 'GB18030', 'GB2312', 'UTF-8', 'UTF-16']"
+
+Sources:
+
+	https://bugs.launchpad.net/ubuntu/+source/gedit/+bug/819714
+	https://bugzilla.redhat.com/show_bug.cgi?id=576047#c2
+	http://ubuntuforums.org/showthread.php?t=1456308
+	http://forum.ubuntu-gr.org/viewtopic.php?p=221205&http#p221205
+
+To reset it to default: a) use the option you backed up from dconf read command
+
+or b) try:
+
+dconf reset /org/gnome/gedit/preferences/encodings/auto-detected
+
+shareimprove this answer
+	
+answered Jan 24 '12 at 10:43
+medigeek
+4,8912537
+	
+   	 
+	
+Thanks a lot ! Detailed and helpful instructions. – waterloo2005 Jan 24 '12 at 11:29
+   	 
+	
+Unexpected error: Invalid byte sequence in conversion input – vipin8169 Mar 31 at 6:26
+add a comment
+up vote
+1
+down vote
+	
+
+If you want do it quick then install medit. All works from the box.
+
+If you still want use gedit then you need do some work:
+
+	Set auto-detect
+
+	gsettings set org.gnome.gedit.preferences.encodings auto-detected "['UTF-8', 'GBK', 'CURRENT', 'ISO-8859-15', 'UTF-16']"
+
+	Install plugin for manual choose encoding. Really useful, especially when auto-detect don't detect encoding properly
+
+"Change encoding" plugin for gedit v3
+
+# Download plugin
+mkdir -p /tmp/encoding
+cd /tmp/encoding
+wget https://aur.archlinux.org/packages/ge/gedit-encoding-plugin/gedit-encoding-plugin.tar.gz
+tar -xzvf gedit-encoding-plugin.tar.gz
+
+# Copy to plugins directory
+mkdir -p ~/.local/share/gedit/plugins
+cp /tmp/encoding/gedit-encoding-plugin/encoding.plugin /tmp/encoding/gedit-encoding-plugin/encodingpy.py ~/.local/share/gedit/plugins
+
+# Remove /tmp/encoding
+rm -Rf /tmp/encoding
+
+Then run gedit. Choose Edit->Preferences->Plugins(tab)->Check "Encoding" checkbox. After you do that you can find "Encoding" in menu "File"
+
+Plugin description: https://aur.archlinux.org/packages/gedit-encoding-plugin/
+
+Plugin for gedit v2. Same author as in plugin above: http://bugzilla.gnome.org/attachment.cgi?id=108326 (this is .tgz ext, but be careful it is a tar only archive) or plugin for gedit v2 by another author: http://petrstepanov.wordpress.com/2010/09/29/gedit-encoding-plugin/
+
+!!! plugin for gedit v2 has got tar.gz ext, but it is only a tar archive that is not gzipped...

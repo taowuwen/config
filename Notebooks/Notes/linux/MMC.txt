@@ -1,0 +1,53 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-11-28T11:09:44+08:00
+
+====== MMC ======
+Created Monday 28 November 2016
+
+
+mmcsdhc-card-readers-and-gentoo-linux
+
+MMC/SDHC
+Card
+Readers
+and
+Gentoo
+Linux
+
+So, I had a need to use my SDHC card in my Dell Studio 17 (1737) notebook.  So, I set out to find out why it wasn't working.  I ended up finding out that I needed to load mmc_block and sdhci-pci in order to get it to work.  Here's what I did.
+
+Kernel
+Configuration
+
+I happen to be using kernel 2.6.30, so your configuration may vary.
+
+	<M> MMC/SD/SDIO card support  --->
+	<M>   MMC block device driver
+	[*] Use bounce buffer for simple hosts
+	<M>   SDIO UART/GPS class support
+	<M>   Secure Digital Host Controller Interface support
+	<M>     SDHCI support on PCI bus
+
+Gentoo
+Module
+Loading
+
+Add the mmc_block and sdhci-pci modules to the configuration at /etc/modules.autoload.d/kernel-2.6
+Then I just loaded them by issuing...
+
+	modprobe mmc_block
+	modprobe sdhci-pci
+
+My
+System
+
+For those searching on the internet, who might have the same MMC/SD chipsets as me.
+
+	tdamac linux # lspci -vvnn | grep Ricoh
+	09:01.0 FireWire (IEEE 1394) [0c00]: Ricoh Co Ltd R5C832 IEEE 1394 Controller [1180:0832] (rev 05) (prog-if 10 [OHCI])
+	09:01.1 SD Host controller [0805]: Ricoh Co Ltd R5C822 SD/SDIO/MMC/MS/MSPro Host Adapter [1180:0822] (rev 22) (prog-if 01)
+	09:01.2 System peripheral [0880]: Ricoh Co Ltd R5C843 MMC Host Controller [1180:0843] (rev 12)
+	09:01.3 System peripheral [0880]: Ricoh Co Ltd R5C592 Memory Stick Bus Host Adapter [1180:0592] (rev 12)
+	09:01.4 System peripheral [0880]: Ricoh Co Ltd xD-Picture Card Controller [1180:0852] (rev ff) (prog-if ff)
+

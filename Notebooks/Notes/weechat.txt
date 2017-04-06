@@ -1,0 +1,18 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-01T18:51:18+08:00
+
+====== weechat ======
+Created Wednesday 01 March 2017
+
+[[/set]] irc.server*
+
+
+[[/set]] irc.server.freenode.autoconnect on
+[[/set]] irc.server.freenode.autojoin "#gentoo,#gentoo-chat,#math..."
+[[/set]] irc....nicks
+[[/set]] irc....username
+[[/set]] irc....password
+
+
+...

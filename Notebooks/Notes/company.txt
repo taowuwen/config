@@ -1,0 +1,63 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-06T10:39:30+08:00
+
+====== company ======
+Created Thursday 06 April 2017
+
+
+DEMO服务器
+
+d.a.morewifi.com
+
+ubuntu server
+192.168.2.240
+
+enterprise mailbox
+taowuwen@joyotime.com 
+
+
+
+涉及产品：
+MR00A（路由+AP）
+MA500AC（双频AP）
+MA210A(单频AP）
+MW150M（路由）
+
+git:
+ssh: git@svn.joyotime.com:yangshaokun/openwrt-15.05-trunk.git
+
+http:
+http://svn.joyotime.com:9527/yangshaokun/openwrt-15.05-trunk.git 
+
+
+涉及产品：
+MW300M(网关）网关/网桥(MW500X MW1000X MW2000E MW3000EF)
+
+git:
+ssh: git@svn.joyotime.com:chenbin/openwrt-15.05.git
+
+http:
+http://svn.joyotime.com:9527/chenbin/openwrt-15.05.git
+
+
+本地：
+192.168.2.240
+编译地址：
+192.168.2.240:8080
+本地固件仓库地址：
+192.168.2.240/fireware
+
+
+morewifi root
+root morewifi123654
+
+192.168.33.111/255.255.255.254
+192.168.33.110
+
+
+
+http://d.a.morewifi.com 
+
+
+http://192.168.33.111/cgi-bin/main 

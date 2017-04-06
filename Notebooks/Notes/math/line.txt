@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-02-07T17:51:33+08:00
+
+====== line ======
+Created Tuesday 07 February 2017
+
+直线方程的公式有以下几种：
+斜截式:y=kx+b
+截距式:x/a+y/b=1
+两点式:(x-x1)/(x2-x1)=(y-y1)/(y2-y1)
+一般式:ax+by+c=0
+只要知道两点坐标，代入任何一种公式，都可以求出直线的方程。 

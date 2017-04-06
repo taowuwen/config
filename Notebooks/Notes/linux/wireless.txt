@@ -1,0 +1,89 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-08-29T22:31:19+08:00
+
+====== wireless ======
+Created Monday 29 August 2016
+
+Capturing Wireless LAN Packets on Ubuntu with tcpdump and Kismet
+
+ Capturing packets on a wireless LAN interface can be fun because you can see what other nearby laptops and access points are sending. By inspecting individual wireless LAN frames, you can see the detailed operation of the wireless LAN medium access control. I first tried capturing wireless LAN packets in 2002. Then, as it is now, the major difficulty was having drivers for your wireless card that support capturing (i.e. monitor or promiscuous mode). Then I used Cisco Aironet 350 PCMCIA cards, RedHat Linux and Ethereal (now called Wireshark). Nowadays many more cards are supported, but most features of capturing are usually only possible under Unix-like operating systems (its hard/impossible in Windows).
+
+	Update 2015-03-09: The following instructions use iwconfig to enable monitor mode on wireless LAN interfaces in Linux; if written instructions for an alternative approach, using iw to enable monitor mode. I suggest reading/trying both; iw seems to be more powerful and now works more often for me than iwconfig.
+
+Here are some instructions for using my Samsung NC10 Ubuntu laptop to capture wireless LAN packets. First using the basic commands of iwconfig and tcpdump, and then the dedicated software Kismet. Of course capturing other peoples traffic may be illegal/unethical in some situations; don't do it if you are not sure. Update (22 Mar 2012): Also I have a screencast below showing the steps on a Lenovo laptop. Either read on or watch the 16 minute video.
+
+Capture Wireless LAN Packets with tcpdump
+
+First make sure NetworkManager is not automatically connecting or turning interfaces on/off. Right-click on the network icon in Gnome and de-select Enable Networking (i.e. so networking is disabled).
+
+Turn the wireless LAN interface off (on my computer the OS labels the interface wlan0):
+
+$ sudo ifconfig wlan0 down
+
+Now use iwconfig to put the interface into monitor mode, check the interface status and then turn the interface on again:
+
+$ sudo iwconfig wlan0 mode monitor
+$ iwconfig wlan0
+wlan0     IEEE 802.11bg  Mode:Monitor  Frequency:2.462 GHz  Tx-Power=20 dBm   
+		  Retry  long limit:7   RTS thr:off   Fragment thr:off
+		  Power Management:off
+          
+$ sudo ifconfig wlan0 up
+
+Update (29 Aug 2013): To set the channel to monitor you should select it before you enter monitor mode. That is, while the interface is in managed mode (e.g. connected to an AP), set the channel, e.g.:
+
+$ sudo iwconfig wlan0 chan 6
+
+Packet capture software can now be used, and the wireless LAN card will capture all packets it can receive, even if they are not direct to your laptop. Here I use tcpdump:
+
+$ sudo tcpdump -i wlan0 -n
+
+tcpdump will print out a single line on standard output for each packet received. Update (22 Mar 2012): the -n option prevents DNS lookups (e.g to convert an IP to DNS) - without this option it is possible that tcpdump will not capture all packets as it will be too slow performing the DNS lookups. To stop the capture press Ctrl-C. Note that by default in Ubuntu 12.04 and later tcpdump captures 65535 Bytes - effectively the entire packet. If you want to capture only a selection of the packet (e.g. first 64 Bytes to save storage space when capturing over a long period of time) and save to a file try:
+
+$ sudo tcpdump -i wlan0 -n -s 64 -w file.cap
+
+The file file.cap can now be opened in Wireshark for easier viewing.
+
+In monitor mode your wireless interface only receives packets--it cannot transmit (i.e. you have no normal network access via wireless). to return your wireless card to normal (managed) mode run:
+
+$ sudo ifconfig wlan0 down
+$ sudo iwconfig wlan0 mode managed
+$ sudo ifconfig wlan0 up
+$ iwconfig wlan0
+wlan0     IEEE 802.11bg  ESSID:"MyWirelessNet"  
+		  Mode:Managed  Frequency:2.462 GHz  Access Point: 00:23:69:12:34:56   
+		  Bit Rate=1 Mb/s   Tx-Power=20 dBm   
+		  Retry  long limit:7   RTS thr:off   Fragment thr:off
+		  Power Management:off
+		  Link Quality=68/70  Signal level=-42 dBm  
+		  Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+		  Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+The wireless card is now associated with an access point again.
+Monitor Wireless LAN with Kismet
+
+Another way to monitor wireless LAN activities is to use a dedicated application like Kismet (on Windows similar software includes Netstumbler and Inssider). Kismet puts your wireless card into monitor mode and then provides a basic view of the different APs nearby (as identified by the captured packets).
+
+To install and configure on Ubuntu:
+
+$ sudo apt-get install kismet
+$ cd /etc/kismet
+$ sudo nano kismet.conf
+
+You must edit the kismet.conf file to configure. Two things must be set (others are optional). First the SUID user should be set to your username:
+
+suiduser=sgordon
+
+And the source needs to be set to identify your wireless LAN interface (wlan0 on my computer, as well as the driver and card (ath5k is the driver for my atheros based wireless card on my Samsung laptop. Steps for setting up Kismet on a Lenovo Ideapad V470 are described here.):
+
+#source=none,none,addme
+source=ath5k,wlan0,atheros
+
+After saving kismet.conf, start Kismet:
+
+$ sudo kismet
+
+If all is well, after a few seconds the Kismet interface will start showing you a list of APs. Press h for help and start exploring. To quit press Q. Make sure when Kismet exists it puts your wireless LAN interface back into managed mode. Check with iwconfig, and if not, do so your self with the above commands.
+
+PDF version of this page, 29 Dec 2010

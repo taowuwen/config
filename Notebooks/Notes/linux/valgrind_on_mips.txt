@@ -1,0 +1,164 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-08-26T18:10:33+08:00
+
+====== valgrind on mips ======
+Created Friday 26 August 2016
+
+
+http://nerdcrap.blogspot.com/2012/07/valgrind-for-mips.html
+
+
+ Valgrind for MIPS
+Support for the MIPS architecture was recently added to Valgrind.
+
+If you want to build Valgrind for your MIPS target, you should definitely refer to the README.mips file, but I wanted to outline the general steps it took to me to successfully build and run Valgrind:
+
+	Get the latest source code - support for MIPS was just recently integrated into the main tree, and currently no official release support it:
+	svn co svn://svn.valgrind.org/valgrind/trunk valgrind
+	cd into the valgrind directory.
+	./autogen.sh
+	./configure --host=mipsel-linux-gnu --with-pagesize=4 CC=my-mips-xccompiler CXX=my-mips-xcppcompiler CFLAGS="-I/path/to/target/kernel -I/path/to/target/kernel/include -D__STRUCT_EXEC_OVERRIDE__ --prefix=/path/to/installation/dir
+	make
+	make install
+
+Some notes on step [4]:
+
+	--host=mipsel-linux-gnu - mipsel is for little endian architecture and mips is for big endian.
+	with-pagesize=4 - this should be set to whatever your kernel's PAGE_SIZE is configured.
+	-D__STRUCT_EXEC_OVERRIDE__ - not sure why, but my kernel is missing the a.out.h in the arch/mips directory, which is needed by Valgrind. I had to define this so Valgrind will not include a.out.h.
+	--prefix - you want to set this up - this will create three directories - /bin, /lib and include, which you want in your target's root filesystem.
+
+Before you can run Valgrind on the target, you'll need to issue the following command:
+export VALGRIND_LIB=/lib/valgrind
+
+That's it, your'e all set - type 'valgrind --help' for all available options.
+
+
+
+
+
+
+最近mips板子上一个程序有内存错误，但是很隐蔽，而且不好重现，在网上搜索了内存检测的工具，选择了valgrind工具，在虚拟机上测试了几个小程序，感觉不错，于是决定编一个交叉valgrind出来，历尽千辛万苦，虽然解决了一些问题，但是还是没有最终解决问题。
+
+在这里先将已经解决的问题的方法献给大家。
+
+问题1. 'optimize' attribute directive ignored
+
+configure的过程这里不再赘述。在make的时候遇到了如下错误，编译停止不前，一直停留在这里。
+
+drd_clientreq.c:79: warning: 'optimize' attribute directive ignored
+
+解决方法，修改drd目录下的Makefile，将DRD_CFLAGS的优化选项由-O2改为-O1。
+
+DRD_CFLAGS = \
+  --param inline-unit-growth=900    \
+  -O1                    \
+  -Wextra            \
+  -Wformat-nonliteral            \
+  -Wno-inline                \
+
+  -Wno-unused-parameter
+
+
+问题2. valgrind: failed to start tool 'memcheck-mips-linux' for platform 'mips32-linux': No such file or directory
+
+在解决了问题1后，编译成功，make install之后，去安装目录下的bin目录，将valgrind拷贝到目标机上。在运行#./vargrind ./memleak的时候，遇到了：
+
+valgrind: failed to start tool 'memcheck-mips-linux' for platform 'mips32-linux': No such file or directory
+
+于是去虚拟机的安装目录下的lib目录，找到 lib/valgrind/memcheck-mips32-linux，上传到目标机上。
+
+再次执行，发现还是报相同的错误，几经辗转，才发现，你的memcheck-mips32-linux在目标机上的路径必须和虚拟机上的完全一样，否则valgrind就会找不到！！
+
+再执行，刚才的错误应该没有了，但是会接着报缺少 default.supp等，缺什么就上传什么。
+
+
+终于像在虚拟机上执行程序一样，啪啪啪，打印出来一些结果，确发现，打印的结果不对！！！抓狂！！！
+
+我的测试程序是：
+
+#include <stdlib.h>
+
+#include <stdio.h>
+
+int main(void)
+
+{
+
+	   char *ptr;
+
+	   ptr = (char *)malloc(10);
+
+	   return 0;
+
+}
+在虚拟机上使用valgrind得到的结果是：
+
+==8692== Memcheck, a memory error detector.
+==8692== Copyright (C) 2002-2007, and GNU GPL'd, by Julian Seward et al.
+==8692== Using LibVEX rev 1804, a library for dynamic binary translation.
+==8692== Copyright (C) 2004-2007, and GNU GPL'd, by OpenWorks LLP.
+==8692== Using valgrind-3.3.0, a dynamic binary instrumentation framework.
+==8692== Copyright (C) 2000-2007, and GNU GPL'd, by Julian Seward et al.
+==8692== For more details, rerun with: -v
+==8692==
+==8692==
+==8692== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 12 from 1)
+==8692== malloc/free: in use at exit: 10 bytes in 1 blocks.
+==8692== malloc/free: 1 allocs, 0 frees, 10 bytes allocated.
+==8692== For counts of detected errors, rerun with: -v
+==8692== searching for pointers to 1 not-freed blocks.
+==8692== checked 48,384 bytes.
+==8692==
+==8692== LEAK SUMMARY:
+==8692==    definitely lost: 10 bytes in 1 blocks.
+==8692==      possibly lost: 0 bytes in 0 blocks.
+==8692==    still reachable: 0 bytes in 0 blocks.
+==8692==         suppressed: 0 bytes in 0 blocks.
+==8692== Rerun with --leak-check=full to see details of leaked memory.
+
+而在目标机上得到的结果是：
+
+==11667== Memcheck, a memory error detector
+==11667== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==11667== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==11667== Command: ./memleak
+==11667==
+==11667== Conditional jump or move depends on uninitialised value(s)
+==11667==    at 0x37447280: ??? (in /lib/ld-2.5.so)
+==11667==    by 0x37436F00: ??? (in /lib/ld-2.5.so)
+==11667==
+==11667== Conditional jump or move depends on uninitialised value(s)
+==11667==    at 0x3743B870: ??? (in /lib/ld-2.5.so)
+==11667==    by 0x3743B75C: ??? (in /lib/ld-2.5.so)
+==11667==
+==11667== Conditional jump or move depends on uninitialised value(s)
+==11667==    at 0x3743BF94: ??? (in /lib/ld-2.5.so)
+==11667==    by 0x3743B75C: ??? (in /lib/ld-2.5.so)
+==11667==
+==11667== Conditional jump or move depends on uninitialised value(s)
+==11667==    at 0x3743B870: ??? (in /lib/ld-2.5.so)
+==11667==    by 0x3743B4E8: ??? (in /lib/ld-2.5.so)
+==11667==
+==11667== Conditional jump or move depends on uninitialised value(s)
+==11667==    at 0x3743BF94: ??? (in /lib/ld-2.5.so)
+==11667==    by 0x3743B4E8: ??? (in /lib/ld-2.5.so)
+==11667==
+==11667== Invalid write of size 4
+==11667==    at 0x374308E8: ??? (in /lib/ld-2.5.so)
+==11667==    by 0x3743087C: ??? (in /lib/ld-2.5.so)
+==11667==  Address 0x7ee6ae1c is just below the stack ptr.  To suppress, use: --workaround-gcc296-bugs=yes
+==11667==
+==11667==
+==11667== HEAP SUMMARY:
+==11667==     in use at exit: 0 bytes in 0 blocks
+==11667==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==11667==
+==11667== All heap blocks were freed -- no leaks are possible
+==11667==
+==11667== For counts of detected and suppressed errors, rerun with: -v
+==11667== Use --track-origins=yes to see where uninitialised values come from
+==11667== ERROR SUMMARY: 10 errors from 6 contexts (suppressed: 0 from 0)
+
+对于目标机上的错误，还不知道具体是什么原因，估计是哪个库文件不太匹配之类的吧。

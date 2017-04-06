@@ -1,0 +1,24 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-09-07T19:26:03+08:00
+
+====== Windows is hibernated, refused to mount ======
+Created Wednesday 07 September 2016
+
+
+
+	Windows is hibernated, refused to mount
+
+Chances are that Windows really is hibernated. Windows does this automatically when you tell it to shutdown normally. The benefit is that you get a faster apparent start-up time.
+
+To shutdown Windows without hybernating, issue the following at a command-prompt (in Windows):
+
+shutdown /s
+
+You might also want include /t 0 for immediate shutdown.
+
+I found a nice tutorial to set up a launcher for this: How to Do a Full Shutdown in Windows 8 Without Disabling Hybrid Boot.
+
+
+
+sudo ntfs-3g -o remove_hiberfile /dev/sdXN /path/to/mount

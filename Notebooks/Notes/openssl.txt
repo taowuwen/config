@@ -1,0 +1,24 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-11T18:25:35+08:00
+
+====== openssl ======
+Created Saturday 11 March 2017
+
+
+密钥生成（对称与非对称） －－－－ 对称密码与公钥密码  (随机数的试用)
+
+DES, AES
+RSA, DSA
+
+加密与解密(对称与非对称的加解密) (对算法与密钥的测试)
+
+散列值计算
+CA 的搭建: 签名与认证
+PBE（password based encryption)的测试
+压缩与解压
+
+
+
+
+

@@ -1,0 +1,105 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-11T18:26:03+08:00
+
+====== 密钥生成 ======
+Created Saturday 11 March 2017
+
+对称密码密钥
+
+
+
+公钥密钥
+
+openssl dsaparam --help
+dsaparam [options] [bits] <infile >outfile
+where options are
+-inform arg   input format - DER or PEM
+-outform arg  output format - DER or PEM
+-in arg       input file
+-out arg      output file
+-text         print as text
+-C            Output C code
+-noout        no output
+-genkey       generate a DSA key
+-rand         files to use for random number input
+-engine e     use engine e, possibly a hardware device.
+number        number of bits to use for generating private key
+
+
+openssl dsaparam -out dsaparam_2048.pem 2048
+openssl dsaparam -out dsaparam_1024.pem 1024
+
+
+
+PBE "icedcoffee"
+openssl gendsa -out gendsapkey.pem -des3 dsaparam_2048.pem
+
+openssl dsa 
+openssl dsa  -in gendsapkey.pem -pubout -out dsapublic.pem -passin "pass:password"
+
+update password:
+openssl dsa -in gendsapkey.pem -out dsaprivatekey.pem -des3 -passin "pass:oldpassword" -passout "pass:newpassword"
+
+
+
+
+# for RSA
+
+openssl genrsa (generate private key)
+openssl genrsa  -out rsaprivatekey.pem -passout "pass:password" -des3 1024
+
+
+openssl rsa
+openssl rsa -in rsaprivatekey.pem -passin "pass:password" -pubout -out rsapublickkey.pem
+
+openssl rsautl
+openssl rsautl -encrypt -pubin -inkey rsapublickkey.pem -in secret -out rsautl_cipher.txt
+openssl rsautl -decrypt -inkey rsaprivatekey.pem -in rsautl_cipher.txt -out rsautl_plain.txt -passin "pass:password"
+
+
+sign :  signature
+openssl rsautl -sign -inkey rsaprivatekey.pem -in secret -out rsautl_signature.bin
+openssl rsautl -sign -inkey rsaprivatekey.pem -in secret -out rsautl_signature.bin -passin "pass:password"
+
+verify
+openssl rsautl -verify -pubin -inkey rsapublickkey.pem -in rsautl_signature.bin -out rsautl_plain.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+DH ( 生成P(生成元 generator), G)
+
+openssl dhparam --help
+dhparam [options] [numbits]
+where options are
+-inform arg   input format - one of DER PEM
+-outform arg  output format - one of DER PEM
+-in arg       input file
+-out arg      output file
+-dsaparam     read or generate DSA parameters, convert to DH
+-check        check the DH parameters
+-text         print a text form of the DH parameters
+-C            Output C code
+-2            generate parameters using  2 as the generator value
+-5            generate parameters using  5 as the generator value
+numbits       number of bits in to generate (default 2048)
+-engine e     use engine e, possibly a hardware device.
+-rand file:file:...
+	 - load the file (or the files in the directory) into
+	 the random number generator
+-noout        no output
+
+
+openssl dhparam -2 -out  dh_2.param -check
+openssl dhparam -C --noout  -in dh_2.param
+openssl dhparam -C  -in dh_2.param

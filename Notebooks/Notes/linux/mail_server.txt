@@ -1,0 +1,705 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-01T14:34:44+08:00
+
+====== mail server ======
+Created Thursday 01 December 2016
+
+
+Centos+POSTFIX+MySQL 邮件服务器  
+
+http://yinqiongjie.blog.163.com/blog/static/5619762009817101912910/
+
+2009-09-17 10:19:12|  分类： Linux |举报 |字号 订阅
+       
+
+  下载LOFTER
+我的照片书  |
+ 
+1 总体框架
+1.1 体系架构
+ 
+
+Postfix：提供smtp标准协议，进行邮件的收发
+
+Cyrus-Imap：管理通过smtp收到的邮件，并为用户的邮件客户端如outlook/foxmail之类提供pop3/imap服务。用户通过连接到cyrus-imap进行个人邮件的管理
+
+Cyrys-sasl：为smtp/pop3/imap提供SASL验证服务的中间层
+
+PAM：为sasl提供一种验证算法的模块，通过mysql插件可以将验证数据存储在mysql数据库中
+
+Mysql：为PAM提供基本的用户数据，同时为postfix提供数据库别名表
+
+ 
+1.2 主要处理流程
+
+收邮件：
+
+1、  postfix收到邮件
+
+2、  postfix到mysql的用户表中检索是否有与收件地址匹配的用户
+
+3、  postfix将邮件转发给cyrus-imap的对应用户邮箱
+
+4、  用户通过邮件客户端登陆cyrus-imap收取邮件
+
+ 
+
+发邮件
+
+1、用户通过邮件客户端登陆cyrus-imap，输入用户密码进行验证
+
+2、用户编写并发送信邮件，提交到cyrus-imap
+
+3、cyrus-imap将邮件提交给postfix，postfix通过smtp将邮件发送给目的地址
+2 模块安装
+2.1 rpm包及源代码准备
+
+主要rpm包可以直接从CentOS 5.1中提取，postfix和pam_mysql因为需要重新编译，所以需要使用源代码
+
+rpm:
+
+pam-0.99.6.2-3.26.el5.i386.rpm
+
+pam-devel-0.99.6.2-3.26.el5.i386.rpm
+
+cyrus-sasl-2.1.22-4.i386.rpm
+
+cyrus-sasl-lib-2.1.22-4.i386.rpm
+
+cyrus-sasl-md5-2.1.22-4.i386.rpm
+
+cyrus-sasl-plain-2.1.22-4.i386.rpm
+
+cyrus-sasl-devel-2.1.22-4.i386.rpm
+
+db4-4.3.29-9.fc6.i386.rpm
+
+db4-utils-4.3.29-9.fc6.i386.rpm
+
+db4-devel-4.3.29-9.fc6.i386.rpm
+
+cyrus-imapd-utils-2.3.7-1.1.el5.i386.rpm
+
+cyrus-imapd-perl-2.3.7-1.1.el5.i386.rpm
+
+cyrus-imapd-2.3.7-1.1.el5.i386.rpm
+
+mysql-5.0.22-2.1.0.1.i386.rpm
+
+mysql-server-5.0.22-2.1.0.1.i386.rpm
+
+mysql-devel-5.0.22-2.1.0.1.i386.rpm
+
+libsysfs-2.0.0-6.i386.rpm
+
+ 
+
+源代码：
+
+postfix 版本 2.5稳定版，下载地址ftp://postfix.cn99.com/postfix/index.html
+
+文件名 postfix-2.5.2.tar.gz
+
+ 
+
+pam_mysql 版本 0.7RC1，下载地址http://pam-mysql.sourceforge.net/
+
+文件名 pam_mysql-0.7RC1.tar.gz
+
+ 
+2.2 安装rpm包
+
+安装指令：rpm –ivh rpm包名称
+
+安装顺序：mysql->pam->db4->cyrus-sasl->cyrus-imap
+
+ 
+2.3 编译postfix
+
+1.将源代码解压缩到/usr/src/
+
+#cd /usr/src
+
+#tar zxfv postfix-2.5.2.tar.gz
+
+#cd postfix-2.5.2
+
+ 
+
+2.确定mysql及cyrus-sasl的库安装位置（必须先安装mysql-devel和cyrus-sasl-devel两个rpm包）
+
+一般位置
+
+mysql include:/usr/include/mysql lib:/usr/lib/mysql
+
+cyrus-sasl include:/usr/include/sasl lib:/usr/lib/sasl2
+
+ 
+
+3.编译postfix
+
+编译postfix需要指定支持mysql和cyrus-sasl功能，并根据上一步指定正确的库和包含文件位置
+
+#make makefiles 'CCARGS=-DUSE_SASL_AUTH -DHAS_MYSQL -DUSE_CYRUS_SASL -I/usr/include/mysql -I/usr/include/sasl' 'AUXLIBS=-L/usr/lib/mysql -L/usr/lib/sasl2 -lmysqlclient -lsasl2 -lz -lm'
+
+#make install
+
+编译过程中，postfix会提示确认各参数，全部按回车使用默认值即可
+
+ 
+
+4.创建初始别名表
+
+#postalias /etc/postfix/aliases
+
+#postmap /etc/postfix/virtual
+
+ 
+
+5.验证postfix
+
+如果原来已经安装了sendmail，则需要做以下步骤删除sendmail，才能启动postfix
+
+#service sendmail stop
+
+#rpm –e sendmail
+
+ 
+
+启动并测试postfix
+
+#postfix start
+
+#telnet localhost 25
+
+ 
+
+如果可以正常输出以下内容则确认postfix启动成功。
+
+ 
+
+Trying 127.0.0.1...
+
+Connected to localhost.localdomain (127.0.0.1).
+
+Escape character is '^]'.
+
+220 hostname.localdomain ESMTP Postfix
+
+ehlo localhost
+
+250- hostname.localdomain
+
+250-PIPELINING
+
+250-SIZE 10240000
+
+250-VRFY
+
+250-ETRN
+
+250-ENHANCEDSTATUSCODES
+
+250-8BITMIME
+
+250 DSN
+
+quit
+
+ 
+
+#postconf –a
+
+如果输出包含有cyrus，则说明已经支持cyrus-sasl验证，如：
+
+cyrus
+
+dovecot
+
+ 
+
+#postconf –m
+
+如果输出包含有mysql，则说明已经支持mysql存取，如：
+
+btree
+
+cidr
+
+environ
+
+hash
+
+mysql
+
+nis
+
+proxy
+
+regexp
+
+static
+
+unix
+
+ 
+2.4 编译pam_mysql
+
+pam_mysql我们选择0.7RC1的版本，因为可以使用配置文件的方式使配置管理更加简单。
+
+ 
+
+1.解压源代码
+
+# cd /usr/src/
+
+# tar zxfv pam_mysql-0.7RC1.tar.gz
+
+ 
+
+2.预配置
+
+#cd pam_mysql-0.7RC1
+
+# ./configure --with-cyrus-sasl2
+
+# make install
+
+ 
+
+3.验证
+
+# cd /lib/security/
+
+# ls pam_mysql.so
+
+如果该so存在，则编译成功
+
+ 
+3 模块配置
+
+首先我们需要为邮件系统创建一个统一的用户表，能够为sasl提供用户验证信息的存取，同时能为postfix提供用户邮箱的信息。
+
+然后将sasl以及imap的认证都设定为通过mysql用户表验证。最后将postfix的别名信息也使用该用户表即可。
+
+我们假定后续配置中，我们使用的库名为mail，登陆用户mail，密码suntek，对应的用户表名为USER，主机名为sample，所属域为sample.eboxhome.com。
+
+ 
+
+我们需要创建两个邮箱用户cyrus和test。cyrus是cyrus-imap的管理用户，test是我们用来测试邮箱功能的测试用户，用户密码均为’suntek’
+
+ 
+3.1 配置mysql
+
+ 
+
+先使用mysql登陆本地数据库
+
+1.创建库
+
+CREATE DATABASE mail;
+
+ 
+
+2.创建用户mail，设置密码，并将库mail的权限全部赋给用户mail
+
+GRANT ALL ON mail.* TO mail@localhost IDENTIFIED BY "suntek";
+
+FLUSH PRIVILEGES;
+
+ 
+
+3.创建USER表
+
+USE mail
+
+ 
+
+CREATE TABLE USER (
+
+ID int(10) unsigned NOT NULL auto_increment,
+
+USERNAME varchar(128) NOT NULL default '',
+
+PASSWORD varchar(40) NOT NULL default '',
+
+FORWARD varchar(128) NOT NULL default '',
+
+DOMAIN varchar(64) NOT NULL default '',
+
+MAIL varchar(64) NOT NULL default '',
+
+FILTER varchar(64) NOT NULL default 'OK',
+
+PARTITION varchar(32) NOT NULL default 'default',
+
+QUOTA int(11) NOT NULL default '10485760',
+
+STATUS tinyint(4) NOT NULL default '1',
+
+PRIMARY KEY (ID),
+
+UNIQUE KEY USERNAME (USERNAME),
+
+UNIQUE KEY MAIL (MAIL)
+
+);
+
+ 
+
+主要字段定义：
+
+USERNAME：用于验证的用户名，如test
+
+PASSWORD：使用encrypt方法加密的用户密码
+
+FORWARD：cyrus-imap中对应的邮箱名，也可以用于别名邮箱转发
+
+DOMAIN：该用户所属的邮件域，如sample.eboxhome.com
+
+MAIL：该用户的完整邮箱名，如test@sample.eboxhome.com
+
+ 
+
+4.创建邮件用户
+
+备注：ENCRPTY是mysql提供的函数，用来生成加密后的密码
+
+ 
+
+INSERT INTO USER (USERNAME,PASSWORD,FORWARD,DOMAIN,MAIL)
+
+VALUES ('cyrus',ENCRYPT('suntek'),'postmaster','sample.eboxhome.com','cyrus@sample.eboxhome.com');
+
+ 
+
+INSERT INTO USER (USERNAME,PASSWORD,FORWARD,DOMAIN,MAIL)
+
+VALUES ('test',ENCRYPT('suntek'),'test','sample.eboxhome.com','test@sample.eboxhome.com');
+
+ 
+
+脚本
+
+ 
+3.2 配置pam
+
+pam的配置主要分两步，首先设置好如何通过mysql的用户表进行验证，然后将smtp/pop3/imap的验证方式都设置为mysql用户表验证
+
+ 
+
+1.创建mysql验证配置文件
+
+#cd /etc/security
+
+#vi pam_mysql.conf
+
+输入以下内容并保存
+
+users.host=localhost
+
+users.database=mail
+
+users.db_user=mail
+
+users.db_passwd=suntek
+
+users.table=USER
+
+users.user_column=USERNAME
+
+users.password_column=PASSWORD
+
+users.password_crypt=y
+
+verbose=1
+
+log.enabled=0
+
+log.table=logs
+
+log.message_column=msg
+
+log.pid_column=pid
+
+log.user_column=user
+
+log.host_column=host
+
+log.rhost_column=rhost
+
+log.time_column=logtime
+
+ 
+
+说明：
+
+users.table是要做select查询的用户表名
+
+users.user_column是用于检索用户名的列
+
+users.password_column是指定要验证密码的列
+
+users.password_crypt是指定密码的加密方式，设置为y，与我们添加用户时的加密方式匹配
+
+verbose=1表示认证部分输出日志，日志位置在/var/log/secure
+
+ 
+
+2.设置邮件验证配置信息
+
+# cd /etc/pam.d/
+
+#vi mail
+
+输入以下内容并保存
+
+account required pam_mysql.so config_file=/etc/security/pam_mysql.conf
+
+auth sufficient pam_mysql.so config_file=/etc/security/pam_mysql.conf
+
+以上参数说明验证时使用pam_mysql驱动，配置文件为/etc/security/pam_mysql.conf
+
+ 
+
+3.设置各服务使用库表验证
+
+# cd /etc/pam.d/
+
+首先先将pop imap smtp三个文件进行备份或者移动到其他地方
+
+# ln -s mail smtp
+
+# ln -s mail pop
+
+# ln -s mail imap
+
+ 
+
+4.验证用户
+
+我们需要启动pop3服务验证在库内添加的用户是否有效
+
+首先启动pop3服务
+
+#service cyrus-imapd start
+
+登陆pop3服务
+
+#telnet localhost 110
+
+如果输出以下内容，则说明数据库验证功能ok，加粗字体为用户输入部分（因为现在还没配置用户邮箱，所以验证成功后会提示找不到邮箱）
+
+Trying 127.0.0.1...
+
+Connected to localhost.localdomain (127.0.0.1).
+
+Escape character is '^]'.
+
++OK suntekbj Cyrus POP3 v2.3.7-Invoca-RPM-2.3.7-1.1.el5 server ready <2661826789.1212052774@sample
+
+user test
+
++OK Name is a valid mailbox
+
+pass suntek
+
+-ERR [SYS/PERM] Unable to locate maildrop: Mailbox does not exist
+
+quit
+
++OK
+
+ 
+
+如果验证失败，请检查/var/log/secure的日志内容，以排除故障
+
+ 
+
+配置文件
+
+ 
+3.3 配置postfix
+
+postfix配置主要涉及三部分，邮件服务器本身信息、mysql别名表和启用sasl验证的配置
+
+1.设置cyrus的转发处理接口
+
+首先确认cyrus的可执行文件的路径为/usr/lib/cyrus-imapd，然后修改master.cf
+
+#cd /etc/postfix/
+
+#vi master.cf
+
+查找以下行，将前面注释去掉，并将调用路径改为上述路径。注意，我们使用的cyrus-imap 2.3的版本，如果使用后面的2.1.5的语句，会导致cyrus返回Bad Protocol。
+
+ ====================================================================
+
+#
+
+# The Cyrus deliver program has changed incompatibly, multiple times.
+
+#cyrus unix  -       n       n       -       -       pipe
+
+  flags=R user=cyrus argv=/usr/lib/cyrus-imapd/deliver -e -m ${extension} ${user}
+
+ 
+
+2.创建mysql别名信息
+
+postfix增加了mysql支持功能后，可以根据用户指定的信息，从库表中读取别名信息，我们这里直接使用前面创建的用户表进行别名管理。
+
+#vi mysql-aliases.cf
+
+写入以下信息，并进行保存
+
+#mql config file for alias lookups on postfix
+
+#
+
+# the user name and password to log into the mysql server
+
+hosts = localhost
+
+user = mail
+
+password = suntek
+
+ 
+
+# the database name on the servers
+
+dbname = mail
+
+query = select FORWARD from USER where USERNAME = '%u' and STATUS = 1 limit 1
+
+ 
+
+query是postfix新增加的功能，可以直接编写查询语句，运行时postfix会取出收件邮箱的用户名部分，替换到%u然后进行查询。
+
+ 
+
+3.修改邮件服务器信息
+
+该部分需要设置邮件服务器的主要信息，同时启动sasl认证以及指定mysql别名表
+
+# vi main.cf
+
+需要修改的参数如下：
+
+#本机完整地址
+
+myhostname = sample.eboxhome.com
+
+#发出邮件的域名
+
+myorigin = $myhostname
+
+#指定从mysql中读取别名
+
+alias_maps = hash:/etc/aliases, mysql:/etc/postfix/mysql-aliases.cf
+
+#指定将邮件转给cyrus处理
+
+mailbox_transport = lmtp:unix:/var/lib/imap/socket/lmtp
+
+local_destination_recipient_limit = 300
+
+local_destination_concurrency_limit = 5
+
+fallback_transport = lmtp:unix:/var/lib/imap/socket/lmtp
+
+#启用sasl验证
+
+smtpd_sasl_auth_enable = yes
+
+smtpd_recipient_restrictions =
+
+		permit_mynetworks
+
+		permit_sasl_authenticated
+
+		reject_unauth_destination
+
+smtpd_sasl_authenticated_header = yes
+
+ 
+
+4.重新加载postfix参数
+
+#postfix reload
+
+ 
+
+配置文件：
+
+ 
+3.4 配置cyrus-imap
+
+cyrus-imap提供了一个管理工具cyradm，以便用户进行邮箱创建及管理，我们需要为创建一个测试用户test的邮箱，以接收从postfix转发过来的test用户邮件。
+
+ 
+
+1.配置imapd
+
+首先需要允许imap里使用完整的命名空间，以及用’.’间隔的地址
+
+#cd /etc
+
+#vi imapd.conf
+
+在后面追加两行：
+
+unixhierarchysep: yes
+
+altnamespace: yes
+
+ 
+
+保存后重新imapd服务
+
+#service cyrus-imapd restart
+
+ 
+
+2.登陆管理终端
+
+#cyradm --user=cyrus localhost
+
+创建用户邮箱，注意邮箱名必须为user/用户名，否则cyrus接收到邮件时会提示Mailbox not exists
+
+创建用户test邮箱
+
+#cm user/test
+
+设置最大空间为10M
+
+#sq user/test STORAGE 1048570
+
+允许管理员使用dm指令删除该用户邮箱
+
+#sam user/test cyrus cd
+
+ 
+
+3.验证
+
+启动邮件客户端outlook/foxmail，将pop3/smtp服务器设置为邮件服务器ip，使用test用户登录，验证是否可以进行邮件收发功能
+
+ 
+3.5 配置自动启动服务
+
+所有服务配置完成之后，我们需要设定sasl认证/smtp/pop3/imap服务都能在下次开机时自动启动
+
+#chkconfig –add postfix
+
+如果以前安装了sendmail，则需要卸除该服务
+
+#chkconfig –del sendmail
+
+#chkconfig saslauthd on
+
+#chkconfig cyrus-imapd on
+
+#chkconfig postfix on

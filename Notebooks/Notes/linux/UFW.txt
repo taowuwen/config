@@ -1,0 +1,60 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-10T14:10:59+08:00
+
+====== UFW ======
+Created Friday 10 March 2017
+
+Ufw使用指南
+
+
+>>> Installing (1 of 1) net-firewall/ufw-0.34_pre805-r2::gentoo
+
+ 
+* To enable ufw, add it to boot sequence and activate it: 
+* -- # rc-update add ufw boot 
+* -- # /etc/init.d/ufw start 
+
+* If you want to keep ufw logs in a separate file, take a look at 
+* /usr/share/doc/ufw-0.34_pre805-r2/logging.  
+* /usr/share/ufw/check-requirements script is installed.  
+* It is useful for debugging problems with ufw. However one 
+* should keep in mind that the script assumes IPv6 is enabled 
+* on kernel and net-firewall/iptables, and fails when it's not.  
+* Note: once enabled, ufw blocks also incoming SSH connections by 
+* default. See README, Remote Management section for more information.  
+
+>>> Recording net-firewall/ufw in "world" favorites file...  
+* Messages for package net-firewall/ufw-0.34_pre805-r2: 
+*   CONFIG_NETFILTER_XT_MATCH_COMMENT:  is not set when it should be.  
+*   CONFIG_NETFILTER_XT_MATCH_HL:       is not set when it should be.  
+*   CONFIG_NETFILTER_XT_MATCH_LIMIT:    is not set when it should be.  
+*   CONFIG_NETFILTER_XT_MATCH_MULTIPORT:        is not set when it should be.  
+*   CONFIG_NETFILTER_XT_MATCH_RECENT:   is not set when it should be.  
+* Please check to make sure these options are set correctly.  
+* Failure to do so may cause unexpected problems.  
+
+* Kernel options listed below are not set. They are not mandatory, but they are often useful. If you don't need some of them, please remove relevant module name(s) from IPT_MODULES in '/etc/default/ufw' before (re)starting ufw.  Otherwise ufw may fail to start!  
+
+* NF_CONNTRACK_NETBIOS_NS: for better Samba support.  
+
+* Messages for package net-firewall/ufw-0.34_pre805-r2: 
+
+* To enable ufw, add it to boot sequence and activate it: 
+* -- # rc-update add ufw boot 
+* -- # /etc/init.d/ufw start 
+* If you want to keep ufw logs in a separate file, take a look at 
+* /usr/share/doc/ufw-0.34_pre805-r2/logging.  
+* /usr/share/ufw/check-requirements script is installed.  
+* It is useful for debugging problems with ufw.  However one 
+* should keep in mind that the script assumes IPv6 is enabled 
+* on kernel and net-firewall/iptables, and fails when it's not.  
+* Note: once enabled, ufw blocks also incoming SSH connections by 
+* default. See README, Remote Management section for more information.  
+
+>>> Auto-cleaning packages...  
+>>> No outdated packages were found on your system.  
+
+* GNU info directory index is up-to-date.  
+* IMPORTANT: 18 news items need reading for repository 'gentoo'.  
+* Use eselect news read to view new items.

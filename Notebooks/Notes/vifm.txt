@@ -1,0 +1,7 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-11-28T11:11:00+08:00
+
+====== vifm ======
+Created Monday 28 November 2016
+

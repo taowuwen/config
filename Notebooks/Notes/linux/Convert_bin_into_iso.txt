@@ -1,0 +1,26 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-04T17:26:38+08:00
+
+====== Convert bin into iso ======
+Created Saturday 04 March 2017
+
+Converting from .bin to .iso
+
+The iat tool allows you to convert from .bin to .iso which you can then mount on your Linux box with ease. According to it's man page, iat allows for conversion from many CD-ROM image file formats, such as BIN,MDF,PDI,CDI,NRG and B5I to ISO-9660
+
+To install iat on Ubuntu machines: (Other distro users may want to search their repos
+
+sudo apt-get install iat
+
+The syntax for using iat is extremely straight-forward:
+
+iat source.bin target.iso
+
+For example, if I were to convert an Ubuntu CD-ROM image from BIN to ISO-9660 (even though Ubuntu is nice enough to provide us with .iso files), I'd use:
+
+iat ubuntu-12.04-desktop-i386.bin ubuntu-12.04-desktop-i386.iso
+
+and the .iso file would be created in the same directory in a few seconds depending on the size of the source file.
+
+

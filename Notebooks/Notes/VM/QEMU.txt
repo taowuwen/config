@@ -1,0 +1,251 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-13T15:06:03+08:00
+
+====== QEMU ======
+Created Monday 13 March 2017
+
+Keywords: qemu bridge wlan wifi tun/tap arp_proxy network manager networkmanager
+
+Goal:
+====
+
+I'll share with everybody willing to read this how to set up Qemu tun/tap network, so
+
+	1. the wireless interface is used - it's NOT a bridge with eth0 !
+	2. a virtual machine can be accesed from your LAN and
+	3. have itself unlimited access to LAN, as well to the Internet, in case of some server software running in the guest
+	4. also accessible from each other
+	5. the NetworkManager would still be in place, so you can connect to wpa/2 secured wlans + DHCP for the host etc.
+	Well this also implies that you are using NetworManager to configure your interfaces, and NOT the /etc/conf.d/net directly.
+
+I've seen dozens of tutorials for how to use a (virtual) bridge to connect wired (eth0...) and tun/tap ifaces, but nowadays it is kind of outdated to plug wires into laptops to be able to share VMs over Inter/intranet. After trying for almost an year - not regularly - following some obscure instructions, I finally found a clean and simple solution for this using technologies like TUN/TAP, ARP proxy + IP forwarding - all fully implemented in the kernel - while I dont need to shut down the NetworkManager and can use all of its functions on the host-interfaces.
+One drawback is that we need to set up static routes & IP addresses for the guests.
+
+Prerequisites:
+==========
+
+Kernel: must have tun/tap functionality activated
+代码:	
+
+=================================================
+  ¦ Symbol: TUN [=m]                                                        ¦ 
+  ¦ Type  : tristate                                                        ¦ 
+  ¦ Prompt: Universal TUN/TAP device driver support                         ¦ 
+  ¦   Location:                                                             ¦ 
+  ¦     -> Device Drivers                                                   ¦ 
+  ¦       -> Network device support (NETDEVICES [=y])                       ¦ 
+  ¦ (1)     -> Network core driver support (NET_CORE [=y])                  ¦ 
+  ¦   Defined at drivers/net/Kconfig:206                                    ¦ 
+  ¦   Depends on: NETDEVICES [=y] && NET_CORE [=y]                          ¦ 
+  ¦   Selects: CRC32 [=y]                                                   ¦	
+
+Host:
+============================
+for tunctl command
+代码:	
+sys-apps/usermode-utilities	
+
+Guest + Host:
+============================
+for ifconfig route etc
+代码:	
+sys-apps/net-tools	
+
+Qemu : (Im building it from GIT)
+代码:	
+$ /opt/bin/qemu-system-x86_64 -version
+QEMU emulator version 1.7.1, Copyright (c) 2003-2008 Fabrice Bellard	
+
+some decent editor, eg vim - but cat does it too.
+
+You dont have to deactivate NetworkManager, but you can do this if you are configuring your wlan some other way. We need a working WiFI in order to reach the VMs from the LAN.
+
+Abstract
+========
+Excuse me if my knowledge is not perfect in that matter
+
+A wlan can not be bridged, due to the nature of the wireless technology. AFAIK the access point will ignore packets with MAC addresses which are not associated, as those coming from the VM.
+
+Because of this we must use the virtual tun/tap kernel device and ARP Proxy.
+
+A tun/tap device acts on the TAP side as ethernet adapter, and as a TUN it operates on IP packets. So the TAP looks to our wlan adapter (HOST) just like any other ethernet device, and Qemu is lurking on its other side (VIRT) for data to its own virtualized network card like e1000 (GUEST). The tun kernel modul creates a device file called /dev/net/tun to allow user space programs to communicate over the interface - that is how Qemu uses it to pass ethernet frames to the VM:
+代码:	
+$ lsof /dev/net/tun
+COMMAND     PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+qemu-syst 18860 root    8u   CHR 10,200      0t0 8307 /dev/net/tun	
+
+We are using only the TAP functionallity. If security is an issue, you can chmod the device file to the desired access rights, or even pass the "-u username" option to tunctl when creating the tap.
+
+In order for the packets to reach the TAP, we configure the wlan interface to proxy the ARPs from(/to ?) the outside and to present itself on the LAN as the TAP behind it (on a MAC level). Then we configure a static route between the two.
+
+At a higher level we must:
+
+In the Host:
+
+	1. Create tap device(s) as interface(s) between guest(s) and host.
+	2. Set tap(s) up , but NOT assigning IP address - instead ...
+	3. .. we add a host-only route in the host using an distinct address (details bellow)
+	4. Enable ARP proxy for BOTH tap and wlan ifaces
+	5. Enable ip forwarding in the host
+	6. Advise Qemu to use the tap
+
+In the Guest:
+
+	7. In the guest we assign same static IP from step 3.
+	8. Also there we add a default route with the address of our host wlan-interface as gateway.
+	9. We set the VM name server to our host-lan DNS.
+
+
+Hands on
+=========
+Assuming all packages are in place
+
+In the Host:
+====================
+1. Create the tap(s)
+代码:	
+tunctl	
+In this form this creates a tap interface with the name tap0. If we want more taps we call it like
+代码:	
+tunctl -t tap1	
+to name the tap as well.
+
+2. Set tap up
+代码:	
+ifconfig tap1 up	
+Note that we dont assign any address to the tap, because this would automatically add a default route to it but for the same host subnet we already are - after this (my) network freezes and only reboot is good.
+
+3. Create distinct host-only route for the VM address:
+代码:	
+route add -host 192.168.1.10 tap1	
+To clarify this I include the route table from my machine :
+代码:	
+
+$  route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.1.1     0.0.0.0         UG    0      0        0 wlp3s0
+127.0.0.0       0.0.0.0         255.0.0.0       U     0      0        0 lo
+192.168.1.0     0.0.0.0         255.255.255.0   U     9      0        0 wlp3s0
+192.168.1.10    0.0.0.0         255.255.255.255 UH    0      0        0 tap1
+192.168.1.20    0.0.0.0         255.255.255.255 UH    0      0        0 tap2
+192.168.1.30    0.0.0.0         255.255.255.255 UH    0      0        0 tap3	
+
+(In this case I have 3 TAPs for three VMs which comunicate with each other)
+
+Now , whenever a packet comes across our wlp3s0 interface (this is my wlan, yours may differ) AND is addressed at
+192.168.1.10, the kernel would route it to the tap1, thus making same 192.168.1.10 effectively the address of our future Qemu VM (explained in the command line bellow).
+
+IMPORTANT: This IP MUST be from your current subnet ! Otherwise it wont trigger an ARP request at all and the packet would pass the gateway and sink into oblivion.
+In my case that is 192.168.1.0, hence 192.168.1.10. If you have , say 192.168.0.0/24 as subnet, you should use 192.168.0.10 par example.
+
+4. But why would a package addressed to 192.168.1.10 arrive at - and be accepted by - our wlan adapter, which has a comletely different IP assigned ? - in my case:
+代码:	
+
+$ ifconfig wlp3s0
+wlp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+		inet 192.168.1.57  netmask 255.255.255.0  broadcast 192.168.1.255	
+
+The magic here has a name: ARP proxy. When activated on the wlan and any other tap, it instructs the wlan to response to ARP requests for the tap's IP address with its own MAC (mimics the MAC of another card), provided the host has a route for this address like in 3.
+
+In terms of commands it is fairly simple to achieve:
+Enabling the ARP proxy on tap and wlan:
+代码:	
+sysctl net.ipv4.conf.tap1.proxy_arp=1
+sysctl net.ipv4.conf.wlp3s0.proxy_arp=1	
+
+The same can be acomplished with simply echo's or cat's to the /proc/sys/net filesystem:
+代码:	
+echo 1 > /proc/sys/net/ipv4/conf/tap1/proxy_arp
+echo 1 > /proc/sys/net/ipv4/conf/wlp3s0/proxy_arp	
+
+or even with BASH shortcuts:
+代码:	
+echo 1 > /proc/sys/net/ipv4/conf/{tap1,wlp3s0}/proxy_arp	
+
+Again , your wlan name may differ.
+
+5. Finally (but some do it first) we must enable IP forwarding in the kernel network stack:
+代码:	
+sysctl net.ipv4.ip_forward=1
+or
+echo 1 > /proc/sys/net/ipv4/ip_forward	
+
+Im lazy and use only one command for all this (but after I ifconfig-ed-up the taps):
+代码:	
+sysctl net.ipv4.ip_forward=1 net.ipv4.conf.tap1.proxy_arp=1 net.ipv4.conf.wlp3s0.proxy_arp=1	
+
+By replacing "=1" with "=0" you are reversing the changes.
+
+If you are using ipv6 you must find its settings appropr.
+
+sysctl is from the sys-process/procps. If you say:
+代码:	
+sysctl -a
+it will display all avialable config variables.
+
+6. Starting the VM:
+You must replace your -net or -netdev options to look like:
+代码:	
+... -netdev tap,id=xxx,ifname=tap1,script=no,downscript=no -device e1000,netdev=xxx  ...	
+
+These are the new-syntax-options.
+Here I am
+
+	. advising Qemu to use a tap device (-netdev tap ...)
+	. passing the tap1 interface to the VM (...,ifname=tap1) and herewith attaching it to the host-route address set up in 3.
+	. creating a Intel e1000 (-device e1000) as the
+	. virtual network card for it (... ,id=xxx ... ,netdev=xxx)
+
+Dont forget the ...,script=no option, because Qemu will look for
+代码:	
+/etc/qemu-ifup /etc/qemu-ifdown	
+scripts to set up the tun/tap device and will abort. You can write them though, there are plenty of examples.
+
+In the Guest:
+==============
+
+7. Configure the Guest's IP address using the one from the route command in 3.:
+代码:	
+ifconfig eth0 192.168.1.10	
+
+In most cases this should be sufficient, but for specificall subnets you may also need to specify the netmask and broadcast addresses too.
+
+8. Add a default gateway, which would be the address of the host's wlan card :
+代码:	
+route add default 192.168.1.57 (in my case)	
+
+9. Assign (add) a name server, which would be your host's (lan's) DNS
+in my case
+代码:	
+cat >> /etc/resolv.conf
+nameserver 192.168.1.1
+Ctrl-D
+
+10. Now try to ping the VM from some local host - not necessarily the VM host. And then ping www.google.com from inside the guest.
+
+Youre set Uuup ! You dont even need to restart NetworkManager and so (and maybe you shouldnt at all).
+
+Dont forget to reverse all changes after you are done:
+代码:	
+sysctl net.ipv4.ip_forward=0 net.ipv4.conf.tap1.proxy_arp=0 net.ipv4.conf.wlp3s0.proxy_arp=0
+ifconfig tap1 down
+(This also should remove the static route. Check with ...)
+route -n	
+
+代码:	
+tunctl -d tap1
+(deletes the tap itself)	
+
+
+A limitation could be that we create static routes and assign those as static Guest's IP addresses, but the default Gateway correlates to the wlan interface' address, which is in most cases DHCP.
+
+If you are scripting kid feel free to automate it - Qemu likes it.
+
+Tested with Gentoo host and Gentoo, Debian, FreeBSD/FreeNAS, Windows XP as Guests. All were accessible from lan and from each other.
+
+Try it and correct me if some copy/paste went wrong. Maybe someone out there knows a better or simpler way for this. Some state, that NetworkManager itself supports wlan bridging in its newer versions.
+Suggestions are welcome.
+
+Your UncleVan.
