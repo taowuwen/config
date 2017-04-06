@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+
+# arthgrim
+#   total words = total 
+#   one time x words 
+#   n times = total / x
+#
+#   and because 60s = n times * sleep y
+#   then n = 60 / y
+# 
+#  so there gonna be :
+#  n = 60 / y = total / x
+#  ===> y = 60 * x / total
+# sleep y is the result
+
+
+[ -z "${X_WORDS}" ] && export X_WORDS=3
+[ -z "${TOTAL_WORDS}" ] && export TOTAL_WORDS=300
+
+
+cat $1 |
+awk -v xwords=${X_WORDS} -v total=${TOTAL_WORDS} '
+BEGIN {
+	total_rd = 0
+	nsecs = (60 * xwords) / total
+	cmd="date +%s"
+	cmd | getline tm_start
+}
+
+function do_sleep(sec) 
+{
+	cmds="sleep " sec "&& exit 27"
+	err = system(cmds)
+
+	if (err != 27)
+		exit
+}
+
+{
+	if (NF <= 0)
+		next
+
+	i = 0
+
+	for (i = 1; i <= NF; i += 3) 
+	{
+		tmp=$i " " $(i + 1) " " $(i + 2)
+		total_rd += 3
+		
+		for (j = 0; j < 128; j++)
+			printf("\b")
+		printf("%32s%-64s%21s", "", tmp, "")
+
+		do_sleep(nsecs)
+	}
+}
+
+END {
+	close(cmd)
+	close(cmd | getline tm_end)
+
+	tm_use = tm_end - tm_start
+
+	printf("\n stat: %d words, %s seconds(%d:%d) [%d %d %f]\n", 
+			total_rd, tm_use, tm_use / 60, tm_use % 60,
+			xwords, total, nsecs)
+}
+'

@@ -1,0 +1,60 @@
+set -g prefix C-b
+bind r source-file ~/.tmux.conf \; display "config reloaded"
+
+bind-key k select-pane -U
+bind-key j select-pane -D
+bind-key h select-pane -L
+bind-key l select-pane -R
+
+
+unbind '"'
+bind-key - splitw -v
+unbind %
+bind-key | splitw -h
+
+
+setw -g mode-keys vi
+set-window-option -g mode-keys vi
+#set-window-option -g utf8 on
+
+bind-key -t vi-copy 'v' begin-selection
+bind-key -t vi-copy 'y' copy-selection
+set-option -g history-limit 10000
+
+
+set -g status-interval 2
+
+set -g status-fg white
+set -g status-bg default
+
+
+set-option -g default-terminal screen-256color
+
+set -g status-justify centre
+
+
+#for left
+
+set -g status-left-length 70
+
+# get default gw inf 
+
+# ip route | awk '/default/{for(i = 1; i < NF; i++) {if ($i == "dev") print $(i+1)}}'
+#set -g status-left "#[bg=#334455]#[fg=#ffffff]#(cpu_mem_info)"
+set -g status-left "#[fg=colour154]#(acpi)|#(cut -d \" \" -f -3 /proc/loadavg)"
+ 
+
+
+set-option -g allow-rename off
+
+set -g set-titles on
+set -g set-titles-string '#T'
+
+set -g status-utf8 on 
+#set -g status-left '#[bg=#bbbbbb]#[fg=#000000]#(cut -d " " -f -3 /proc/loadavg) #[bg=#4e4e4e]#[fg=#ffffff]#(date +" %H:%M ")'
+
+# for right
+set -g status-right-length 70
+#set -g status-right "#[fg=white]#(ip route show default | awk '/default/{ for (i = 1; i <= NF; i++) {if ($i == "via") print $(i+1)}}') | #[fg=colour45]%d %b %R"
+#set -g status-right "#[fg=white]#(ip route |awk '/default/{print \"GW\",$3}')| #[fg=colour190]#(date +'%a %D %H:%M:%S')"
+set -g status-right "#[fg=colour45]#(network_info)| #[fg=colour190]#(date +'%a %D %H:%M:%S')"
