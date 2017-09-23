@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+cd ${HOME}/shadowsocks/shadowsocks
+
+
+
+do_start()
+{
+	./local.py -c ../shadowsocks.json -d start
+}
+
+
+do_stop()
+{
+	./local.py -c ../shadowsocks.json -d stop
+
+	return $?
+
+	./local.py -c ../shadowsocks.json -d stop
+
+	sleep 1
+
+	fl=/tmp/gossh.pid
+
+	[ -f $fl ] && {
+		kill -9 `cat $fl`
+		rm -f $fl
+	}
+}
+
+case $1 in
+	start)
+		do_start
+	;;
+	stop)
+		do_stop
+	;;
+	restart)
+		./local.py -c ../shadowsocks.json -d restart
+	#	do_stop
+	#	do_start
+
+#./local.py -d restart
+		;;
+	log)
+		cat /tmp/gosshlog.log
+		;;
+
+	*)
+		echo "usage $0 [start|stop|restart|log]"
+
+	;;
+esac
+
+exit 0

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+_do_stop()
+{
+	killall -q mpd
+	while pgrep -x mpd >/dev/null; do sleep 1; done
+}
+
+main()
+{
+	case $1 in
+		stop)
+			_do_stop
+		;;
+		start|reload|restart)
+			_do_stop
+			mpd /home/tww/usr/etc/mpd.conf &>/tmp/mpd.error
+		;;
+		*)
+	esac
+}
+
+main $*

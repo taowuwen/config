@@ -1,0 +1,26 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-06-11T12:15:11+08:00
+
+====== gentoo- gcc optimization ======
+Created Sunday 11 June 2017
+
+If using distcc:
+代码:	
+echo $(
+	gcc -v -march=native -x c /dev/null 2>&1 | \
+	grep -- '-march' | \
+	egrep -o -- '-+(m|param )[-_=.a-zA-Z0-9]+' | \
+	sort -u
+)	
+
+
+Otherwise:
+代码:	
+-march=native
+
+
+
+
+https://wiki.gentoo.org/wiki/GCC_optimization
+https://wiki.gentoo.org/wiki/Safe_CFLAGS#A4.2FA6.2FA8-XXXX_.2F_XXXXM

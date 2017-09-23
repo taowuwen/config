@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+
+if [ $# -lt 1 ]; then
+	echo "usage: ffile filename"
+fi
+
+for arg in $*
+do
+	find . -type d -iname "*$arg*" 2>/dev/null
+done
+
+

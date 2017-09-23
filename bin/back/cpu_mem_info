@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+
+top -bn1 | awk '
+BEGIN{
+	cpu=0
+	mem_total=0
+	mem_used=0
+	mem_buffers=0
+	mem_cached=0
+}
+/Cpu|Mem|Swap/{
+	if ($0 ~ "Cpu") {
+		cpu=$2 + $5 + $(NF-1)
+		next
+	}
+
+	if ($0 ~ "buff") {
+		mem_total = $4
+		mem_used = $8
+		mem_buffers = $(NF-1)
+		next
+	}
+
+	if ($0 ~ "avail") {
+		mem_cached = $(NF - 2)
+		exit
+	}
+}
+END {
+	printf("CPU %.1f%%|MEM %0.2f%%(%0.2fG/%0.2fG)\n", cpu,
+			mem_used * 100 / mem_total,
+			mem_used / lshift(1, 20),
+			mem_total / lshift(1, 20))
+}'
+#	mem_used=(mem_used - mem_buffers - mem_cached)

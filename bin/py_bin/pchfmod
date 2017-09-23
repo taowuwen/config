@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+import sys
+
+from sysfile import CChmodFile
+
+
+def main():
+	ch = CChmodFile()
+
+	l = len(sys.argv)
+	if l <= 1:
+		return ch.walk()
+
+	for i in range(1, l):
+
+#	cur = os.path.abspath(sys.argv[i])
+		setattr(ch, "_path", sys.argv[i])
+		ch.walk()
+
+if __name__ =="__main__":
+	main()

@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+
+from py_bin.cpu_info import cpuinfo
+from py_bin.meminfo  import meminfo 
+
+cpu = cpuinfo()
+mem = meminfo(lambda:0)
+
+print("cpu: {}% mem: {:<3.2f}%".format(cpu.usage, mem.usage))
+
+

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+[ $# -lt  1 ]  && echo "usage: $0 dirctory" && exit 0
+
+for pid in `ps ux | awk '/dybg/{if ($0 ~ /awk/) next; print $2}'`
+do
+	[ -n "$pid" ] && [ $pid -eq $$ ] || kill -9 $pid 2>/dev/null
+done
+
+while true
+do
+	for fl in $(ls `realpath $1`/*.jpg) $(ls `realpath $1`/*.png)
+	do
+		[ -f "$fl" ] && {
+			feh --bg-scale "$fl"
+			sleep 5m
+		}
+	done
+done

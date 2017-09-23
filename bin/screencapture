@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -x
+
+out=/tmp/screencapture-$(date +"%Y%m%d%H%M%S").ogg
+echo "start to recording into $out  $date"
+
+#recordmydesktop -o $out -fps 10 --no-sound -x 1 -y 304 -width 1024 -height 768 -v_quality 63 -s_quality 10 --quick-subsampling -workdir /tmp --zero-compression 
+#recordmydesktop -o $out  --no-sound -v_quality 63 -s_quality 10 $@
+recordmydesktop -o $out --no-sound -fps 10 -v_quality 63 -s_quality 10 --quick-subsampling -workdir /tmp $@
+
+#recordmydesktop -o $out -fps 10 --no-sound -x 1 -y 304 -v_quality 63 -s_quality 10
+
+echo "finished $out"

@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-05-06T22:15:17+08:00
+
+====== mpv ======
+Created Saturday 06 May 2017
+
+
+截取mp3
+mplayer -ss 00:02:10 -endpos 30 -ao pcm:file=截取后的.mp3 源文件.mp3
+

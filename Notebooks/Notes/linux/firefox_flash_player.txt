@@ -1,0 +1,32 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-05-04T16:05:05+08:00
+
+====== firefox flash player ======
+Created Thursday 04 May 2017
+
+
+
+gnash is better than flash player on linux
+
+emerge gnash (notice the USEs)
+
+mkdir .mozila/firefox/xxxx/plugins
+
+# do not want to use that directory? try this below
+
+global directory: [[/usr/lib64/nsbrowers/plugins]]
+
+# don't forget, use global version
+cd [[/opt/firefox/brower]]
+ln -s [[/usr/lib64/nsbrowers/plugins]] plugins
+
+
+# local version?
+# cp libflashplayer.so xxx/plugins; if you use flashplayer
+# ln -s [[/usr/lib64/gnash/npapi/libgnashplayer.so]] libgnashplayer.so
+
+restart firefox && enjoy!
+
+
+

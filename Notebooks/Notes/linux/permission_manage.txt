@@ -1,0 +1,73 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-05-08T10:59:06+08:00
+
+====== permission manage ======
+Created Monday 08 May 2017
+
+
+So what is the sticky bit?
+
+A sticky bit is a permission bit that is set on a directory that allows only the owner of the file within that directory, the owner of the directory or the root user to delete or rename the file. No other user has the needed privileges to delete the file created by some other user.
+
+This is a security measure to avoid deletion of critical folders and their content (sub-directories and files), though other users have full permissions.
+Why does /tmp have the t sticky bit?
+
+The /tmp directory can be used by different Linux users to create temporary files. Now, what if an user deletes/rename a file created by some other user in this directory?
+
+Well, to avoid these kind of issues, the concept of sticky bit is used. So for that a 777 is given but preserving the sticky bit is not a bad idea.
+How can I setup the sticky bit for a directory?
+
+I'll set a sticky bit on a directory called test on my Desktop.
+
+Symbolic way (t represents the sticky bit):
+
+chmod o+t ~/Desktop/test
+
+or
+
+chmod +t ~/Desktop/test
+
+Numerical/octal way (1, sticky bit bit as value 1 in the first position)
+
+chmod 1757 ~/Desktop/test
+
+Now let us test the results:
+
+ls -li ~/Desktop/test
+
+1551793 drwxrwxrwt 45 hadi hadi 20485 Mar 11 14:35 ~/Desktop/test
+
+To delete/Remove a sticky bit
+
+chmod o-t ~/Desktop/test
+
+Now let us test the results:
+
+ls -li ~/Desktop/test
+
+1551793 drwxrwxrwx 45 hadi hadi 20485 Mar 11 14:35 ~/Desktop/test
+
+
+http://www.zzee.com/solutions/linux-permissions.shtml#setuid
+
+
+http://www.zzee.com/solutions/linux-permissions.shtml#setuid
+
+SUID 	If set, then replaces "x" in the owner permissions to "s", if owner has execute permissions, or to "S" otherwise. Examples:
+		-rws------ both owner execute and SUID are set
+		-r-S------ SUID is set, but owner execute is not set
+
+
+
+SGID 	If set, then replaces "x" in the group permissions to "s", if group has execute permissions, or to "S" otherwise. Examples:
+		-rwxrws--- both group execute and SGID are set
+		-rwxr-S--- SGID is set, but group execute is not set
+
+Sticky 	If set, then replaces "x" in the others permissions to "t", if others have execute permissions, or to "T" otherwise. Examples:
+		-rwxrwxrwt both others execute and sticky bit are set
+		-rwxrwxr-T sticky bit is set, but others execute is not set
+
+
+
+

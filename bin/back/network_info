@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+
+gateway_info() 
+{
+	ip route | awk 'BEGIN {
+		gw=0
+		inf=0
+	}
+	/default/{
+		for (i = 1; i < NF; i++) {
+			if ($i ~ "dev") {
+				i++
+				inf=$i
+				continue
+			}
+
+			if ($i ~ "via") {
+				i++
+				gw=$i
+				continue
+			}
+		}
+
+		exit
+	}
+
+	END {
+		print inf, gw
+	}
+	'
+}
+
+gwinfo=`gateway_info`
+
+[ -z "$gwinfo" ] && {
+	echo "GW MISSING"
+	exit
+}
+
+inf=`echo $gwinfo | cut -d" " -f1`
+gw=`echo $gwinfo | cut -d" " -f2`
+ipaddr=`ip -4  -o addr show dev $inf | awk '{print $4}'`
+
+echo "$inf $ipaddr via $gw"

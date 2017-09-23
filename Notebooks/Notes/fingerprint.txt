@@ -1,0 +1,65 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-09-02T10:20:22+08:00
+
+====== FingerPrint  ======
+Created Friday 02 September 2016
+
+Installation
+=========
+0. First of all, if you have installed Fingerprint GUI manually before, get rid of it completely. Remove all binaries, shared libraries, any other files and undo all the changes you have made to your system config files (especially to files under /etc/pam.d/).
+
+1. Add this PPA to your sources:
+
+sudo add-apt-repository ppa:fingerprint/fingerprint-gui
+sudo apt-get update
+
+2. Install the packages:
+
+sudo apt-get install libbsapi policykit-1-fingerprint-gui fingerprint-gui
+
+3. Log out of your session and log back in (we need the new session defaults to be picked up).
+
+Setup
+=====
+After installation launch “Fingerprint GUI” and enrol your fingerprints.
+That should be all you need to do!
+Try locking your screen, logging out and in, sudo in terminal and running graphical apps requiring root privileges.
+
+Uninstallation
+===========
+GNOME users: The package policykit-1-fingerprint-gui replaces GNOME's standard PolicyKit daemon (contained in package policykit-1-gnome). However, when you decide to uninstall Fingerprint GUI (and hence remove policykit-1-fingerprint-gui), policykit-1-gnome will not get automatically installed back, hence there won't be any PolicyKit daemon in the system, and APT will try to remove all the packages that depend on it. Therefore, if you want to remove Fingerprint GUI, make sure you install policykit-1-gnome back first.
+sudo apt-get install policykit-1-gnome
+sudo apt-get remove fingerprint-gui
+
+KDE SC users: The above instructions for GNOME users apply to you as well, just replace “policykit-1-gnome” by “polkit-kde-1” throughout the text.
+
+Note for KDE SC users
+==================
+Please note that Fingerprint GUI doesn't work with kdm and kscreensaver because of a bug in these applications (see https://bugs.kde.org/show_bug.cgi?id=105631).
+
+Note for Lubuntu users
+==================
+lxdm does not properly support alternative authentication methods in the PAM stack. If you want to use fingerprint-gui with Lubuntu, you should install lightdm and lightdm-gtk-greeter.
+
+Troubleshooting
+=============
+If something doesn't work as you expect, you can try one of the following steps:
+• In terminal run "sudo pam-auth-update". Make sure that the PAM profile called “Fingerprint authentication by Fingerprint GUI” is on top of the list and active. Otherwise, you may try resetting your PAM to system defaults with "sudo pam-auth-update --force".
+• Check /var/log/auth.log for any clues. Fingerprint GUI is set up to run in debugging mode by default.
+
+Bugs & Contact
+=============
+If you think you have found a bug in the programme itself, the best way to report it is through the upstream forums at http://home.ullrich-online.cc/fingerprint/Forum/ .
+For issues with the packaging contact the package maintainer: https://launchpad.net/~jurenka
+More info: https://launchpad.net/~fingerprint/+archive/ubuntu/fingerprint-gui
+Press [ENTER] to continue or ctrl-c to cancel adding it
+
+gpg: keyring `/tmp/tmp6xpovvv0/secring.gpg' created
+gpg: keyring `/tmp/tmp6xpovvv0/pubring.gpg' created
+gpg: requesting key 2F20733F from hkp server keyserver.ubuntu.com
+gpg: /tmp/tmp6xpovvv0/trustdb.gpg: trustdb created
+gpg: key 2F20733F: public key "Launchpad fprint" imported
+gpg: Total number processed: 1
+gpg:               imported: 1  (RSA: 1)
+OK

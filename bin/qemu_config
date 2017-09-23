@@ -1,0 +1,215 @@
+#!/bin/bash
+
+
+QEMU=/usr/bin/qemu-system-x86_64
+
+GROUP=kvm
+TAPS="tap0 tap1 tap2"
+IF_WAN=""
+
+#tunctl -t tap0 -g kvm
+#ifconfig tap0 0.0.0.0 promisc up
+
+#brctl addbr br0
+#brctl addif br0 tap0
+#brctl stp br0 off
+#ifconfig br0 10.0.1.1/24 up
+
+
+#sysctl net.ipv4.conf.tap0.proxy_arp=1
+#sysctl net.ipv4.conf.eth1.proxy_arp=1
+#sysctl net.ipv4.ip_forward=1
+#iptables -t nat -A POSTROUTING -o br0 -j MASQUERADE
+#iptables -A FORWARD -i br0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
+#iptables -A FORWARD -i eth1 -o br0 -j ACCEPT 
+
+gateway_info() 
+{
+	ip route | awk 'BEGIN {
+		gw=0
+		inf=0
+	}
+	/default/{
+		for (i = 1; i < NF; i++) {
+			if ($i ~ "dev") {
+				i++
+				inf=$i
+				continue
+			}
+
+			if ($i ~ "via") {
+				i++
+				gw=$i
+				continue
+			}
+		}
+
+		exit
+	}
+
+	END {
+		print inf, gw
+	}
+	'
+}
+
+
+
+_check_link_ready()
+{
+	[ -z "`ip link show dev $1 | grep UP`" ] && {
+		echo "local environment not ready, call qemu_config init"
+		return 1
+	}
+
+	return 0
+}
+
+# tapx
+network_ready()
+{
+	local tapx
+
+	_check_link_ready br0 || return 1
+	_check_link_ready $1 || return 1
+
+	return 0
+}
+
+
+#taps
+_create_tap()
+{
+	for tap in $TAPS
+	do
+		echo "creating tun: $tap..."
+		tunctl -t $tap -g kvm || return 1
+		ip link set dev $tap up || return 1
+	done
+
+	return 0
+}
+
+_del_tap()
+{
+	for tap in $TAPS
+	do
+		echo "destroying tun: $tap..."
+		ip link set dev $tap down
+		tunctl -d $tap
+	done
+}
+
+_create_br()
+{
+	brctl addbr br0 || return 1
+	brctl stp br0 off
+	ip link set dev br0 up
+	ip addr add 10.0.12.254/24 dev br0
+}
+
+_del_br()
+{
+	ip link set dev br0 down
+	brctl delbr br0
+}
+
+_link_br()
+{
+	for tap in $TAPS
+	do
+		echo "link tun: $tap..."
+		brctl addif br0 $tap
+	done
+}
+
+_unlink_br()
+{
+	for tap in $TAPS
+	do
+		echo "unlink tun: $tap..."
+		brctl delif br0 $tap
+	done
+}
+
+_fw_init()
+{
+	for tap in $TAPS
+	do
+		sysctl net.ipv4.conf.$tap.proxy_arp=1
+	done
+	sysctl net.ipv4.conf.$IF_WAN.proxy_arp=1
+	sysctl net.ipv4.ip_forward=1
+
+	# redir NAT
+
+	cat /etc/resolv.conf | grep "^nameserver" |
+	while read line
+	do
+		addr=`echo $line | cut -d' ' -f2`
+
+		iptables -t nat -A PREROUTING -i br0 -d 10.0.12.254/32 -p udp --dport 53 -j DNAT --to-destination $addr:53
+	done
+
+	iptables -t nat -A POSTROUTING -o $IF_WAN -j MASQUERADE
+	iptables -A FORWARD -i br0 -o $IF_WAN -m state --state RELATED,ESTABLISHED -j ACCEPT
+	iptables -A FORWARD -i $IF_WAN -o br0 -j ACCEPT 
+}
+
+_fw_clear()
+{
+	iptables -t nat -F
+	iptables -t filter -F
+}
+
+network_init()
+{
+	local gwinfo
+	echo "qemu network prepare by taowuwen@gmail.com"
+	echo "qemu do network initialing...(currently we do create)"
+
+	gwinfo=`gateway_info`
+
+	[ -z "$gwinfo" ] && {
+		echo "Network not unreachable, give up"
+		exit 2
+	}
+
+	[ `id -u` -eq 0 ] || {
+		echo "Permission denied, retry by sudo qemu_config init"
+		exit  1
+	}
+
+	IF_WAN=`echo $gwinfo | cut -d" " -f1`
+
+	_create_tap || return $?
+	_create_br || return $?
+	_link_br
+
+	_fw_init || return $?
+}
+
+network_uninit()
+{
+	_fw_clear
+	_unlink_br
+	_del_tap
+	_del_br
+}
+
+main()
+{
+	[ "$1" == "init" ] && {
+		network_init
+		return $?
+	}
+
+	[ "$1" == "uninit" ] && {
+		network_uninit
+		return $?
+	}
+}
+
+[ `basename $0` == "qemu_config" ] && main $*
+
+

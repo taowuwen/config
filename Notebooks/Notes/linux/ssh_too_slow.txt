@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-05-04T11:42:19+08:00
+
+====== ssh too slow ======
+Created Thursday 04 May 2017
+
+
+Have you verified your DNS setup?
+Try the setting mdns off in /etc/host.conf.
+
+EDIT:
+
+It seems gentoo is handling this a bit different. To disable multicast DNS lookups, you have to change the file /etc/nsswitch.conf.
+There should be something like:
+hosts:          files mdns
+Change it to:
+hosts:          files dns
+
+
+2. Edit your "/etc/ssh/ssh_config" and comment out these lines:
+GSSAPIAuthentication yes
+GSSAPIDelegateCredentials no
+
+3. So in sshd_config on the server change this:
+  #UseDNS yes
+to this:
+  UseDNS no
+

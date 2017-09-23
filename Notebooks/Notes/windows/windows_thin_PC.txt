@@ -1,0 +1,88 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-08-15T13:53:09+08:00
+
+====== windows thin PC ======
+Created Tuesday 15 August 2017
+
+Windows Thin PC MAK密钥： 
+ 
+9BHD6-PDPYF-8CXRR-8X39P-4224J
+ 
+W24VT-KXB4P-DD49G-J7PJP-8QGVF
+ 
+W3T3V-3WMVM-YMTD6-87V3K-WMVQW
+ 
+BXDQD-V3FT3-BCGK3-9P6H3-TXXH7
+ 
+
+
+
+
+http://www.cnblogs.com/anyview/p/5116678.html
+
+百度
+https://my.oschina.net/xiaogg/blog/203215
+
+
+激活
+https://bitmingw.com/2017/04/24/windows-thin-pc-download-install-activate/
+
+
+
+
+
+Windows Thin PC是美国微软公司在2011年发布的一款新的计算机操作系统，主要面向虚拟桌面基础架构消费者，Windows Thin PC是Windows 7的轻量级版本，主要面向企业用户。
+微 软表示，推出Windows Thin PC的目的是为了保护企业当前对硬件和软件的投资，使操作系统符合企业用户的环境。有报道称，MSDN和Technet的用户、微软合作伙伴网络项目的银 牌和金牌合作伙伴，以及Windows Intune或VDA用户也可以获得完整版的Windows Thin PC。
+
+
+以下所有文件集成包下载
+集成包下载http://pan.baidu.com/s/1dDeNOE9
+
+ISO安装包大小:1.47G
+32位Windows Thin PC系统要求：
+处理器：主频1 GHz
+内存：1GB（实际占用约505MB）
+硬盘：16GB可用空间（实际占用约2.7GB）
+显卡:DirectX 9,WDDM 1.0驱动
+实际上，这款系统运行时所需的资源比上面列的要少，它需要的硬盘空间比Windows 7少，不过内存和CPU占用却和Windows 7很接近。
+
+
+下载地址http://pan.baidu.com/s/1gdxaCMn
+官方下载地址http://download.microsoft.com/download/C/D/7/CD789C98-6C1A-43D6-87E9-F7FDE3806950/ThinPC_110415_EVAL_x86fre.iso
+MNDN版下载：ed2k://|file|en_windows_thin_pc_x86_697681.iso|1576980480|2D0E6A048EB3F314F556B4F0834A95E2|/
+官方介绍页面http://www.microsoft.com/en-us/windows/enterprise/products-and-technologies/virtualization/thinpc.aspx
+
+
+方法一:
+
+Windows Thin PC MAK密钥：
+
+9BHD6-PDPYF-8CXRR-8X39P-4224J
+
+W24VT-KXB4P-DD49G-J7PJP-8QGVF
+
+W3T3V-3WMVM-YMTD6-87V3K-WMVQW
+
+BXDQD-V3FT3-BCGK3-9P6H3-TXXH7
+
+方法二:
+
+使用证书文件激活:
+
+1,下载证书文件：http://pan.baidu.com/s/1gddxNWZ
+2,将证书文件放到文件位置 C:\Windows\System32\spp\tokens\skus\Security-SPP-Component-SKU-Embedded 中
+3,然后管理员权限运行 slmgr.vbs –rilc 即可成功激活!
+
+
+汉化方法：
+中文语言包下载：http://pan.baidu.com/s/1qWPO6ug
+http://download.microsoft.com/download/8/6/1/8616D57C-1163-45FB-832A-15FA60571002/SP1/Chinese%20(Simplified)%20Language%20Pack%20-%20Windows%20Embedded%20Standard%207%20SP1/lp.cab
+
+
+Windows Thin PC 简体中文包的安装方法：
+1.下载Windows Thin PC 简体中文语言包lp.cab放到D盘的根目录
+2.以管理员身份运行CMD命令输入：dism /online /add-package /packagepath:D:\lp.cab
+3.完成后输入：bcdedit /set {current} locale zh-cn	
+4.完成后再输入：bcdboot %WinDir% /l zh-cn
+完成后重启计算机进入控制面板进行设置即可。

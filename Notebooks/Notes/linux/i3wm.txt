@@ -1,0 +1,25 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-13T10:48:14+08:00
+
+====== i3wm ======
+Created Thursday 13 July 2017
+
+
+
+Make terminals transparent?
+1. urxvt
+URxvt.transparent: true
+URxvt.shading:20
+
+! Included this so you know how to make your foreground not match the color of your background
+URxvt.foreground: #eeeeee
+
+or: other terminal
+
+2. install compton
+exec --no-startup-id compton
+~/.config/compton.conf 
+opacity-rule=["85:class_g='Termite']
+
+http://i.imgur.com/8LLJQrA.png

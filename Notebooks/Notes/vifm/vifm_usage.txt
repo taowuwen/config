@@ -155,8 +155,7 @@ N - previous file matching last search pattern.
 cw - change word is used to rename a file.
 dd - move selected file or files to ~/.vifm/Trash
 yy, Y  - yank selected files.
-p - put last selected files.
-n - next file matching last search pattern.
+p - put last selected filesnext file matching last search pattern.
 s - open a shell - this is temporary and will be removed.
 t - select or unselect a file.
 v, V - start visual selection of files.

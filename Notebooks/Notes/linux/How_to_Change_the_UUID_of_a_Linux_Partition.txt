@@ -1,0 +1,94 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-06-12T11:26:19+08:00
+
+====== How to Change the UUID of a Linux Partition ======
+Created Monday 12 June 2017
+
+
+http://www.sudo-juice.com/how-to-change-the-uuid-of-a-linux-partition/
+
+
+Duplicated UUID’s can be a big problem on your machine. But luckily it is easy to change the UUID of a Linux partition and can be done in roughly 1-2 minutes!
+
+The UUID of a Linux partition is the Universally Unique IDentifier of that partition. I would say with a fair bit of confidence that in this and most scenarios, the Linux partition UUID has more of a local machine scope.
+
+This ID is used in a few places to identify the partition. The most notable being your /etc/fstab file, which manages the mounting of partitions at boot time. Here is a little snippet from mine…
+# &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;
+proc            /proc           proc    nodev,noexec,nosuid 0       0
+# / was on /dev/sdc3 during installation
+UUID=9467f4de-4231-401f-bcaa-fee718d49e85 /               ext4    errors=remount-ro 0       1
+# swap was on /dev/sdb1 during installation
+UUID=aabe7e48-2d11-421f-8609-7ea9d75e7f9b none            swap    sw              0       0
+1
+2
+3
+4
+5
+6
+	
+# &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;
+proc            /proc           proc    nodev,noexec,nosuid 0       0
+# / was on /dev/sdc3 during installation
+UUID=9467f4de-4231-401f-bcaa-fee718d49e85 /               ext4    errors=remount-ro 0       1
+# swap was on /dev/sdb1 during installation
+UUID=aabe7e48-2d11-421f-8609-7ea9d75e7f9b none            swap    sw              0       0
+
+Why would you need to change a partition UUID?
+
+The main reason being a clash of ID’s. Technically the likelihood of creating 2 identical UUID’s is very rare (read more on the Random UUID probability of duplicates). But there may be cases where you clone a partition using DD or Clonezilla and the clone resides on the same machine – different physical hard drive or partition.
+
+Cloning using both the tools mentioned above will create an exact copy of the partition all the way down to the UUID – and now you have 2 partitions with the same UUID. From the example of my /etc/fstab above, the UUID is no longer unique and it will mount the first partition it finds with that UUID.
+How do I change the UUID?
+
+This isn’t hard at all.
+First find the device path
+
+You can find the device path using the following command:
+sudo blkid
+1
+	
+sudo blkid
+
+Your output will look something like this:
+sudo blkid
+/dev/sdb1: UUID="aabe7e48-2d11-421f-8609-7ea9d75e7f9b" TYPE="swap" 
+/dev/sdc1: UUID="9467f4de-4231-401f-bcaa-fee718d49e85" TYPE="ext4" 
+/dev/sdc3: UUID="93a54a4a-e0f5-4152-ae59-2245e8d16ee4" TYPE="ext4"
+/dev/sde5: UUID="9467f4de-4231-401f-bcaa-fee718d49e85" TYPE="ext4" 
+/dev/sde6: LABEL="var" UUID="30433f28-1b79-4b4d-9985-fef5b1c886b5" TYPE="ext4"
+1
+2
+3
+4
+5
+6
+	
+sudo blkid
+/dev/sdb1: UUID="aabe7e48-2d11-421f-8609-7ea9d75e7f9b" TYPE="swap" 
+/dev/sdc1: UUID="9467f4de-4231-401f-bcaa-fee718d49e85" TYPE="ext4" 
+/dev/sdc3: UUID="93a54a4a-e0f5-4152-ae59-2245e8d16ee4" TYPE="ext4"
+/dev/sde5: UUID="9467f4de-4231-401f-bcaa-fee718d49e85" TYPE="ext4" 
+/dev/sde6: LABEL="var" UUID="30433f28-1b79-4b4d-9985-fef5b1c886b5" TYPE="ext4"
+
+Here you can see that /dev/sdc1 and /dev/sde5 have the same UUID. The path of the partition I want to change is /dev/sde5
+Secondly, generate a UUID
+
+This is simple, the following command will output a UUID like below:
+uuidgen
+f0acce91-a416-474c-8a8c-43f3ed3768f9
+1
+2
+	
+uuidgen
+f0acce91-a416-474c-8a8c-43f3ed3768f9
+
+Finally apply the new UUID to the partition
+
+This is also another command, tune2fs, which will apply our new UUID to our device path:
+sudo tune2fs /dev/sde5 -U f0acce91-a416-474c-8a8c-43f3ed3768f9
+1
+	
+sudo tune2fs /dev/sde5 -U f0acce91-a416-474c-8a8c-43f3ed3768f9
+
+Done, now you can update your grub to include the correct UUID’s to reduce any risk of your system confusing the partitions.

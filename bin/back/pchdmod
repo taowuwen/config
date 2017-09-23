@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+import sys, os, stat
+
+def update_path(path=None):
+	if path == None:
+		return None
+
+	try:
+		subitems = os.listdir(path)
+		for elem in subitems:
+			cur = path + "/" + elem
+
+			if os.path.isdir(cur):
+				os.chmod(cur, stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP)
+				update_path(cur)
+
+
+	except FileNotFoundError:
+		print("Directory", path, "not found")
+	except:
+		print(sys.exc_info())
+
+
+def main():
+#	print("hello, world", sys.argv)
+#	print("current directory: %s"%(os.getcwd()))
+#	print("cmd : argc: %d, argv: %s"%(len(sys.argv), str(sys.argv)))
+
+	l = len(sys.argv)
+	if l <= 1:
+		return update_path(os.getcwd())
+
+	for i in range(1, l):
+		cur = os.path.abspath(sys.argv[i])
+		update_path(cur)
+
+if __name__ =="__main__":
+	main()

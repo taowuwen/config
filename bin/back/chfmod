@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+
+find . -type f -exec chmod a-x {} \;

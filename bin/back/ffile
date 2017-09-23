@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+
+#if ! [ -n $1 ]; then
+#	echo "helo world"
+#fi
+
+if [ $# -lt 1 ]; then
+	echo "usage: ffile filename"
+fi
+
+for arg in $*
+do
+	find . -type f -iname "*$arg*" 2>/dev/null | grep -i --color=auto  "$arg"
+done
+
+

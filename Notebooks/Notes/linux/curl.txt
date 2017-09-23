@@ -1,0 +1,75 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-06-02T16:03:19+08:00
+
+====== curl ======
+Created Friday 02 June 2017
+
+What is the cURL command-line syntax to do a POST request?
+
+
+
+With fields:
+
+curl --data "param1=value1&param2=value2" https://example.com/resource.cgi
+
+Multipart:
+
+curl --form "fileupload=@my-file.txt" https://example.com/resource.cgi
+
+Multipart with fields and a filename:
+
+curl --form "fileupload=@my-file.txt;filename=desired-filename.txt" --form param1=value1 --form param2=value2 https://example.com/resource.cgi
+
+Without data:
+
+curl --data '' https://example.com/resource.cgi
+
+curl -X POST https://example.com/resource.cgi
+
+curl --request POST https://example.com/resource.cgi
+
+For more information see the cURL manual. The cURL tutorial on emulating a web browser is helpful.
+
+With libcurl, use the curl_formadd() function to build your form before submitting it in the usual way. See the libcurl documentation for more information.
+
+For large files, consider adding parameters to show upload progress:
+
+curl --tr-encoding -X POST -v -# -o output -T filename.dat \
+  http://example.com/resource.cgi
+
+The -o output is required, otherwise no progress bar will appear.
+
+
+
+
+
+
+
+For a RESTful HTTP POST containing XML:
+
+	curl -X POST -d @filename.txt http://example.com/path/to/resource --header "Content-Type:text/xml"
+
+or for JSON, use this:
+
+	curl -X POST -d @filename.txt http://example.com/path/to/resource --header "Content-Type:application/json"
+
+This will read the contents of the file named filename.txt and send it as the post request.
+
+
+
+
+
+
+
+Data from stdin: use -d @-. Example:
+
+echo '{"text": "Hello **world**!"}' | curl -d @- https://api.github.com/markdown
+
+Output:
+
+<p>Hello <strong>world</strong>!</p>
+
+
+
+

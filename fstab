@@ -51,3 +51,13 @@ tmpfs			/var/log	tmpfs		noatime,nodiratime,size=25%	0 0
 
 #/dev/mmcblk0p1 /home/tww/mount/mmc32g vfat rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,showexec,utf8,flush,errors=remount-ro,uhelper=udisks2
 
+
+
+/dev/mmcblk0: PTTYPE="dos"
+/dev/mmcblk0p1: UUID="9016-4EF8" TYPE="vfat"
+/dev/sda1: LABEL="M-gM-3M-;M-gM-;M-^_M-dM-?M-^]M-gM-^UM-^Y" UUID="7E40049440045575" TYPE="ntfs" PARTUUID="4a26a79c-01"
+/dev/sda2: UUID="2A1207641207347B" TYPE="ntfs" PARTUUID="4a26a79c-02"
+/dev/sda3: UUID="5ACEB6D3CEB6A6A3" TYPE="ntfs" PARTUUID="4a26a79c-03"
+/dev/sda4: LABEL="data" UUID="008A80DE8A80D218" TYPE="ntfs" PARTUUID="4a26a79c-04"
+/dev/sdb1: UUID="abb56084-14ed-45b4-8be7-069336ad0477" TYPE="ext4" PARTUUID="c403a777-01"
+/dev/sdb5: UUID="0f1c3062-577d-4f15-ab08-5d0d7e5bfd26" TYPE="ext4" PARTUUID="c403a777-05"

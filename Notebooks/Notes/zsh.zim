@@ -1,0 +1,56 @@
+* If you want to enable Portage completions and Gentoo prompt,
+* emerge app-shells/gentoo-zsh-completions and add
+*      autoload -U compinit promptinit
+*      compinit
+*      promptinit; prompt gentoo
+* to your ~/.zshrc
+
+* Also, if you want to enable cache for the completions, add
+*      zstyle ':completion::complete:*' use-cache 1
+* to your ~/.zshrc
+
+* Note that a system zprofile startup file is installed. This will override
+* PATH and possibly other variables that a user may set in ~/.zshenv.
+* Custom PATH settings and similar overridden variables can be moved to ~/.zprofile
+* or other user startup files that are sourced after the system zprofile.
+
+* If PATH must be set in ~/.zshenv to affect things like non-login ssh shells,
+* one method is to use a separate path-setting file that is conditionally sourced
+* in ~/.zshenv and also sourced from ~/.zprofile. For more information, see the
+* zshenv example in //usr/share/doc/zsh-5.2/StartupFiles/.
+
+* See https://wiki.gentoo.org/wiki/Zsh/HOWTO for more introduction documentation.
+
+
+>>> Recording app-shells/zsh in "world" favorites file...
+
+* Messages for package app-shells/zsh-5.2:
+
+* If you want to enable Portage completions and Gentoo prompt,
+* emerge app-shells/gentoo-zsh-completions and add
+*      autoload -U compinit promptinit
+*      compinit
+*      promptinit; prompt gentoo
+* to your ~/.zshrc
+* Also, if you want to enable cache for the completions, add
+*      zstyle ':completion::complete:*' use-cache 1
+* to your ~/.zshrc
+* Note that a system zprofile startup file is installed. This will override
+* PATH and possibly other variables that a user may set in ~/.zshenv.
+* Custom PATH settings and similar overridden variables can be moved to ~/.zprofile
+* or other user startup files that are sourced after the system zprofile.
+* If PATH must be set in ~/.zshenv to affect things like non-login ssh shells,
+* one method is to use a separate path-setting file that is conditionally sourced
+* in ~/.zshenv and also sourced from ~/.zprofile. For more information, see the
+* zshenv example in //usr/share/doc/zsh-5.2/StartupFiles/.
+* See https://wiki.gentoo.org/wiki/Zsh/HOWTO for more introduction documentation.
+>>> Auto-cleaning packages...
+
+>>> No outdated packages were found on your system.
+
+* Regenerating GNU info directory index...
+* Processed 152 info files.
+
+* IMPORTANT: 18 news items need reading for repository 'gentoo'.
+* Use eselect news read to view new items.
+

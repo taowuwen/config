@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-08-15T17:41:31+08:00
+
+====== nmcli ======
+Created Tuesday 15 August 2017
+
+https://ask.fedoraproject.org/en/question/64217/how-to-connect-to-wifi-using-nmcli/
+
+
+
+iwlist wlp3s0 scan
+
+That will also show you whether your box sees your wifi network, and its networkname. If that works, you can add a connection with
+
+nmcli conn add <parameters>
+
+where for the specific parameters I suggest to consult the man page of nmcli. It will probably be something like:
+
+nmcli conn add type wifi con-name <connectionname> ifname wlp3s0 ssid <wifinetworkname>
+
+After that you can bring it up with
+
+nmcli conn up <connectionname>
+
+
+
+
+ nmcli con show
