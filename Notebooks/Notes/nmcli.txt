@@ -27,3 +27,8 @@ nmcli conn up <connectionname>
 
 
  nmcli con show
+
+for list: 
+nmcli d wifi list
+for connect:
+nmcli d wifi connect "youssid" ifname wlps30 password "";
