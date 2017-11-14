@@ -3,7 +3,7 @@ alias 'ls=ls -C  -F --color=auto'
 alias 'la=ls -a'
 alias 'll=ls -l'
 
-echo $PATH | grep -q "$HOME" || {
+echo $PATH | grep -q "$HOME/usr/bin" || {
 	export PATH=$PATH:${HOME}/usr/bin:${HOME}/usr/sbin
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/usr/lib
 	export MANPATH=$MANPATH:${HOME}/usr/share/man
