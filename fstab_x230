@@ -1,0 +1,31 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/sdb1 during installation
+UUID=abb56084-14ed-45b4-8be7-069336ad0477 /               ext4    errors=remount-ro 0       1
+UUID=0f1c3062-577d-4f15-ab08-5d0d7e5bfd26 /home		ext4		  defaults,noatime	0 1
+
+tmpfs			/tmp		tmpfs		noatime,nodiratime,size=75%	0 0
+tmpfs			/var/log	tmpfs		noatime,nodiratime,size=25%	0 0
+
+#/dev/SWAP		none		swap		sw		0 0
+UUID=2A1207641207347B /home/tww/mount/winc	ntfs-3g	defaults,noatime,uid=1000,gid=1000,umask=0,fmask=0137,dmask=0022,windows_names,codepage=936,iocharset=utf8,nls=utf8	0 2
+UUID=008A80DE8A80D218 /home/tww/mount/wind	ntfs-3g	defaults,noatime,uid=1000,gid=1000,umask=0,fmask=0137,dmask=0022,windows_names,codepage=936,iocharset=utf8,nls=utf8	0 2
+
+
+UUID=306EDF766EDF3378 /home/tww/mount/tww1t	ntfs-3g	noauto,defaults,noatime,uid=1000,gid=1000,umask=0,fmask=0137,dmask=0022,windows_names,codepage=936,iocharset=utf8,nls=utf8	0 1
+
+# tww-8g
+UUID=4504-0001 /home/tww/mount/usb	vfat noauto,rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,showexec,utf8,flush,errors=remount-ro,uhelper=udisks2
+
+# kindle
+UUID=386D-51D5 /home/tww/mount/kindle	vfat noauto,rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,showexec,utf8,flush,errors=remount-ro,uhelper=udisks2
+
+
+
+#UUID=9016-4EF8 /home/tww/mount/mmc32g vfat noauto,rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,showexec,utf8,flush,errors=remount-ro,uhelper=udisks2
+#/dev/sdc1 /home/tww/mount/tww1t	ntfs-3g	noauto,defaults,noatime,uid=1000,gid=1000,umask=0,fmask=0137,dmask=0022,windows_names,codepage=936,iocharset=utf8,nls=utf8	0 1
