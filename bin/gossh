@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-cd ${HOME}/shadowsocks/shadowsocks
-
+cd ${HOME}/codec/python/shadowsocks/shadowsocks
 
 
 do_start()
