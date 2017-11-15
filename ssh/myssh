@@ -1,0 +1,37 @@
+
+
+
+209.141.33.9
+
+
+
+Hostname: xixitao.com
+Main IP: 209.141.33.9
+
+
+;; StallionVM Control Panel
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+https://manage.buyvm.net/
+Username: taowuwen@126.com
+Password: 2345ac708b793f26
+
+
+
+
+ssserver -p 443 -k passwd -m rc4-md5 --workers 10 --pid-file /tmp/ss.pid --log-file /tmp/ss.log --user nobody -v -d start
+ssserver -p 3389 -k passwd -m rc4-md5 --workers 10 --pid-file /tmp/ss2.pid --log-file /tmp/ss2.log --user nobody -v -d start
+ssserver -p 10010 -k passwd -m rc4-md5 --workers 10 --pid-file /tmp/ss3.pid --log-file /tmp/ss3.log --user nobody -v -d start
+ssserver -p 22222 -k passwd -m rc4-md5 --workers 10 --pid-file /tmp/ss4.pid --log-file /tmp/ss4.log --user nobody -v -d start
+
+Usage
+ssserver -p 443 -k password -m rc4-md5
+
+To run in the background:
+sudo ssserver -p 443 -k password -m rc4-md5 --user nobody -d start
+
+To stop:
+sudo ssserver -d stop
+To check the log:
+sudo less /var/log/shadowsocks.log
+
