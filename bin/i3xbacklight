@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os, sys
+
+backlight_root="/sys/class/backlight/intel_backlight"
+
+def get_content(fl = None):
+	assert fl != None, "file name should not be null"
+
+	_res = []
+
+	with open(fl, "r") as f:
+		for ln in f:
+			_res.append(ln.strip())
+
+	return _res
+
+def get_int(fl):
+	try:
+		return int(get_content(fl)[0])
+	except:
+		return 0
+
+def set_content(fl, val):
+	assert fl != None and val != None, "both file and valued not be null"
+
+	with open(fl, "w") as f:
+		f.write(val)
+
+def set_int(fl, val):
+	set_content(fl, str(val))
+
+def inc_brightness(val):
+	set_int(backlight_root + "/brightness", get_int(backlight_root + "/actual_brightness") + val)
+	pass
+
+def dec_brightness(val):
+	set_int(backlight_root + "/brightness", get_int(backlight_root + "/actual_brightness") - val)
+	pass
+
+def no_opt(val = None):
+	print("inc/dec val")
+	pass
+
+
+def main():
+	opt_cmds = {
+		"inc": inc_brightness,
+		"dec": dec_brightness
+	}
+
+	opt_cmds.get(sys.argv[1], no_opt)(int(sys.argv[2]))
+
+
+if __name__ == '__main__':
+	if len(sys.argv) == 3:
+		main()

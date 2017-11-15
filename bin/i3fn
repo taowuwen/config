@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+
+case $1 in
+	XF86AudioMute)
+		amixer sset Master mute
+	;;
+
+	XF86AudioLowerVolume)
+		amixer sset Master unmute
+		amixer sset Speaker unmute
+		exec amixer sset Master 5%-
+	;;
+
+	XF86AudioRaiseVolume)
+		amixer sset Master unmute
+		amixer sset Speaker unmute
+		exec amixer sset Master 5%+
+	;;
+esac
+
+

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+[ $# -eq 2 ] || exit 1
+
+backlight_root="/sys/class/backlight/intel_backlight"
+
+
+case $1 in
+	inc)
+		echo `expr $(cat $backlight_root/actual_brightness) + $2` >$backlight_root/brightness
+	;;
+
+	dec)
+		echo `expr $(cat $backlight_root/actual_brightness) - $2` >$backlight_root/brightness
+	;;
+esac
+
