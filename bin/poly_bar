@@ -6,6 +6,24 @@ _do_stop()
 	while pgrep -x polybar >/dev/null; do sleep 1; done
 }
 
+_do_polybar()
+{
+	xrandr | awk '/^[a-zA-Z]*-[1-9]\ /{print $1, $2}' |
+	while read line
+	do
+		dev_monitor=`echo $line | cut -d' ' -f1`
+		con_status=`echo $line | cut -d' ' -f2`
+
+		case $con_status in
+			connected)
+				MONITOR=$dev_monitor polybar $* &
+			;;
+			disconnected|*)
+			;;
+		esac
+	done
+}
+
 main()
 {
 	cmd=$1
@@ -17,8 +35,11 @@ main()
 		start|reload|restart)
 			_do_stop
 
-			[ "$1" = "all" ] && polybar top &
-			polybar bottom &
+#	[ "$1" = "all" ] && polybar top &
+#			polybar bottom &
+
+			[ "$1" = "all" ] && _do_polybar top
+			_do_polybar bottom
 		;;
 		*)
 	esac
