@@ -1,9 +1,8 @@
-#!/bin/sh
-
+#!/bin/bash
 
 . ${HOME}/usr/bin/qemu_config 
 
-ROOT=/home/tww/mount/wind/vmware
+ROOT=/home/tww/virtual_machine
 TAP=tap0
 
 start_vm()
@@ -12,11 +11,12 @@ start_vm()
 		-localtime \
 		-enable-kvm \
 		-cpu host \
-		-hda $ROOT/WindowsVM.img \
-		-net nic,vlan=0 -net tap,ifname=$TAP,script=no,downscript=no \
-		-m 256M \
+		-hda $ROOT/win7/win7-vm.img \
+		-m 1G \
+		-net nic,vlan=0 \
+		-net tap,ifname=$TAP,script=no,downscript=no \
 		-monitor stdio \
-		-name WindowsXP \
+		-name "Win 7"\
 		"$@"
 }
 

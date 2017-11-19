@@ -3,11 +3,12 @@
 
 QEMU=/usr/bin/qemu-system-x86_64
 
-GROUP=kvm
+GROUP=netdev # kvm if on gentoo
 TAPS="tap0 tap1 tap2"
 IF_WAN=""
 
-#tunctl -t tap0 -g kvm
+#tunctl -t tap0 -g kvm ---> on gentoo -u USERNAME
+#tunctl -t tap0 -g netdev --> on ubuntu
 #ifconfig tap0 0.0.0.0 promisc up
 
 #brctl addbr br0
@@ -83,7 +84,8 @@ _create_tap()
 	for tap in $TAPS
 	do
 		echo "creating tun: $tap..."
-		tunctl -t $tap -g kvm || return 1
+		ip tuntap add dev $tap mode tap group $GROUP || return 1
+#tunctl -t $tap -g $GROUP -u tww || return 1
 		ip link set dev $tap up || return 1
 	done
 
@@ -210,6 +212,6 @@ main()
 	}
 }
 
-[ `basename $0` == "qemu_config" ] && main $*
+[ "`basename $0`" == "qemu_config" ] && main $*
 
 

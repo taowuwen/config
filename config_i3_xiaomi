@@ -192,6 +192,7 @@ assign [class="Skype"]      4:chat
 assign [class="Hexchat"]    5:hex
 assign [class="VirtualBox"] 6:vm
 assign [class="Vmware"]     6:vm
+assign [class="qemu-system*"]     6:vm
 assign [class="Gvim"]       10:vim
 assign [Class="Thunderbird"] 3:mail
 assign [class="qpdfview"]     10:vim
