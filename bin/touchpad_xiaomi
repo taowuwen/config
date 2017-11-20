@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+
+set_touchpad_1()
+{
+	xinput set-int-prop "SYNA3105:00 06CB:7EA5" "Device Enabled" 8 0
+}
+
+set_touchpad_0()
+{
+	xinput set-int-prop "SYNA3105:00 06CB:7EA5" "Device Enabled" 8 1
+}
+
+
+enable=`xinput list-props "SYNA3105:00 06CB:7EA5" | grep "Device Enabled" | awk '{print $NF}'`
+
+`type set_touchpad_$enable` &>/dev/null && set_touchpad_$enable
+
