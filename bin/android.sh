@@ -32,8 +32,15 @@ case $1 in
 		}
 	;;
 
+	clean)
+		shift
+		cd ${HOME}/AndroidStudioProjects/MyApplication && {
+			./gradlew clean $*
+		}
+	;;
+
 	*)
-		echo $0 emulator/log/compile/shell/studio
+		echo $0 emulator/log/compile/shell/studio/clean
 		
 	;;
 esac
