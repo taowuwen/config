@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-11-23T14:07:43+08:00
+
+====== zip ======
+Created Thursday 23 November 2017
+
+unzip -O cp936
+LC_ALL=zh_CN.gb2312 unzip # 一键转区，哼
+p7zip
