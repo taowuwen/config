@@ -216,6 +216,7 @@ exec thunderbird
 exec /home/tww/usr/bin/gossh start
 exec --no-startup-id /home/tww/usr/bin/poly_bar reload all
 exec --no-startup-id /home/tww/usr/bin/mpd_ start
+exec --no-startup-id /home/tww/.dropbox-dist/dropboxd
 
 
 bindsym $mod+t border normal
