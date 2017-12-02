@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-12-01T21:58:22+08:00
+
+====== local http server ======
+Created 星期五 01 十二月 2017
+
+python -m http.server # for 3.X
+
+
+python -m SimpleHTTPServer 8888  # for 2.X
