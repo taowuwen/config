@@ -14,9 +14,12 @@ case $1 in
 	;;
 
 	compile)
+		shift
+
+		version=${1:-Debug}
 
 		cd ${HOME}/AndroidStudioProjects/MyApplication && {
-			./gradlew  assembleDebug && ./gradlew installDebug
+			./gradlew  assemble$version && ./gradlew install$version
 		}
 	;;
 
