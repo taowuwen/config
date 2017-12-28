@@ -18,6 +18,11 @@ Password: 2345ac708b793f26
 
 
 
+Username : PonyVM48500
+Password : ppRKKhMJ5TxzebsH
+
+
+
 
 ssserver -p 443 -k passwd -m rc4-md5 --workers 10 --pid-file /tmp/ss.pid --log-file /tmp/ss.log --user nobody -v -d start
 ssserver -p 3389 -k passwd -m rc4-md5 --workers 10 --pid-file /tmp/ss2.pid --log-file /tmp/ss2.log --user nobody -v -d start
