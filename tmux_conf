@@ -38,10 +38,9 @@ set -g status-justify centre
 set -g status-left-length 70
 
 # get default gw inf 
-
+#[bg=#334455]
 # ip route | awk '/default/{for(i = 1; i < NF; i++) {if ($i == "dev") print $(i+1)}}'
-#set -g status-left "#[bg=#334455]#[fg=#ffffff]#(cpu_mem_info)"
-set -g status-left "#[fg=colour154]#(acpi)|#(cut -d \" \" -f -3 /proc/loadavg)"
+set -g status-left "#[fg=colour154]#(cpu_mem_info)|#(cut -d \" \" -f -3 /proc/loadavg)"
  
 
 

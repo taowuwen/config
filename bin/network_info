@@ -9,7 +9,7 @@ inf, ip, mask, gateway, network = net.route_info
 inf, rx, tx = net.speed
 
 
-print("{inf} {ip}/{mask} via {gateway} →{rx: >7.7s} ↓ {tx:>7.7s} ↑".format(
+print("{inf} {ip} {rx: >7.7s} ↓ {tx:>7.7s} ↑".format(
 	inf=inf,
 	ip=net.int2ip(ip),
 	mask=net.int2ip(mask),
