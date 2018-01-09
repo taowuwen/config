@@ -4,7 +4,7 @@ URxvt*.transparent: true
 ! URxvt*.shading: 0 to 99 darkens, 101 to 200 lightens
 URxvt*.shading: 30
 
-!URxvt.multichar_encoding:utf-8
+URxvt.multichar_encoding:utf-8
 
 URxvt*loginShell: true
 
@@ -52,7 +52,7 @@ Xft*hinting:          Full
 !URxvt.font:xft:Bitstream Vera Sans Mono-12,xft:Microsoft Yahei:pixelsize=16
 !URxvt.boldFont:xft:Bitstream Vera Sans Mono-12:Bold,xft:Microsoft Yahei:pixelsize=16:Bold
 !URxvt*font: xft:DejaVu Sans Mono:size=8,xft:AR PL SungtiL GB:size=10
-URxvt.font: xft:DejaVu Sans Mono:size=8,xft:AR PL SungtiL GB:size=10
+URxvt.font: xft:DejaVu Sans Mono:size=12,xft:AR PL SungtiL GB:size=12
 !xft:Bitstream Vera Sans Mono-12
 
 URxvt.perl-ext-common:default,clipboard,matcher,keyboard-select

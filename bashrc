@@ -3,8 +3,11 @@ alias 'ls=ls -C  -F --color=auto'
 alias 'la=ls -a'
 alias 'll=ls -l'
 
-export PATH=$PATH:${HOME}/usr/bin:${HOME}/usr/sbin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/usr/lib
+echo $PATH | grep -q "$HOME/usr/bin" || {
+	export PATH=$PATH:${HOME}/usr/bin:${HOME}/usr/sbin
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/usr/lib
+	export MANPATH=$MANPATH:${HOME}/usr/share/man
+}
 
 export WINEDLLOVERRIDES='winemenubuilder.exe=d'
 
@@ -57,3 +60,6 @@ export MANPATH=$MANPATH:${HOME}/usr/share/man
 
 
 alias nvlc='nvlc --no-color'
+alias python='/usr/bin/python3'
+
+alias chromium-browser=/usr/bin/chromium-browser --disk-cache-dir="/tmp/chrome.cache" --disk-cache-size=104857600 --media-cache-size=104857600
