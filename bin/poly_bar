@@ -8,7 +8,8 @@ _do_stop()
 
 _do_polybar()
 {
-	xrandr | awk '/^[a-zA-Z]*-[1-9]\ /{print $1, $2}' |
+	xrandr |
+	awk '/^[a-zA-Z]*-.*\ /{print $1, $2}' |
 	while read line
 	do
 		dev_monitor=`echo $line | cut -d' ' -f1`
