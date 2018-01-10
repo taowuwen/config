@@ -2,3 +2,8 @@
 *.pyc
 __pycache__
 *.db
+
+bin/mbedtls_*
+bin/ss-*
+
+
