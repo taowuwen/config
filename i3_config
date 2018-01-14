@@ -194,7 +194,7 @@ assign [class="Chromium-browser"]    2:web
 assign [class="chromium-browser"]    2:web
 
 exec --no-startup-id compton
-exec i3-sensible-terminal
+exec LC_CTYPE=zh_CN.UTF-8 i3-sensible-terminal
 #exec feh --bg-scale /usr/share/slim/themes/fingerprint/background.png
 #exec feh --bg-scale /home/tww/Pictures/015.jpg
 #exec conky

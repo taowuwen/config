@@ -57,7 +57,7 @@ URxvt.font: xft:DejaVu Sans Mono:size=12,xft:AR PL SungtiL GB:size=12
 
 URxvt.perl-ext-common:default,clipboard,matcher,keyboard-select
 URxvt.keysym.M-u:     perl:url-select:select_next
-URxvt.url-launcher: /usr/bin/firefox-bin
+URxvt.url-launcher: /usr/bin/firefox
 URxvt.matcher.button:1
 
 
