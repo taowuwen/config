@@ -68,7 +68,8 @@ class CFindDUP(CFind):
 
 			for fl in fls[1:]:
 				if self._del:
-					print("{} <delete mark setted>".format(fl))
+					print("{} ** removed".format(fl))
+					os.unlink(fl)
 				else:
 					print(fl)
 			print("<END>{key:-^74s}".format(key=key))
