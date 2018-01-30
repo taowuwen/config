@@ -1,0 +1,229 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-01-26T16:07:19+08:00
+
+====== centos ======
+Created Friday 26 January 2018
+
+建立文件夹
+
+[root@localhost CentOS]# mkdir /media/CentOS
+
+把光盘加载到本地
+
+[root@localhost CentOS]# mount /dev/cdrom /media/CentOS
+
+在/etc/yum.repos.d/目录下，有两个文件
+
+CentOS-Base.repo和CentOS-Media.repo
+
+其中CentOS-Base.repo记录着网络上的yum源的地址和路径信息等
+
+CentOS-Media.repo记录着可以从本地作为yum源的介质和路径。其中还有这样一个说明：
+
+# CentOS-Media.repo
+#
+# This repo is used to mount the default locations for a CDROM / DVD on
+# CentOS-5. You can use this repo and yum to install items directly off the
+# DVD ISO that we release.
+#
+# To use this repo, put in your DVD and use it with the other repos too:
+# yum --enablerepo=c5-media [command]
+#
+# or for ONLY the media repo, do this:
+#
+# yum --disablerepo=\* --enablerepo=c5-media [command]
+
+[c5-media]
+name=CentOS-$releasever - Media 
+
+
+name=CentOS-$releasever - Media
+baseurl=file:///media/ CentOS
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-beta
+
+我们只需编辑下bashurl ，将自己的光盘路径写入就可以了。
+
+clip_image002觉得自己的光盘的源足够用了。不需要网络源，或者没有网络。
+
+可以使用yum --disablerepo=\* --enablerepo=c5-media [command]
+
+yum命令允许使用本地media介质的源而已。正确的命令如下（更新gcc为例）：
+
+clip_image001 [root@centos cdrom]# yum --disablerepo =* --enablerepo=c5-media install gcc
+
+clip_image001[1] clip_image002[1]Loading " installonlyn " plugin
+clip_image002[2]Setting up Update Process
+clip_image002[3]Setting up repositories
+clip_image002[4]c5 - media                   100 % |=========================| 1.1 kB     00 : 00
+clip_image002[5]Reading repository metadata in from local files
+clip_image002[6]primary.xml.gz             100 % |=========================| 834 kB     00 : 00
+clip_image002[7]################################################## 2400 / 2400
+clip_image002[8]No Packages marked for Update / Obsoletion
+clip_image002[9]
+
+比如安装gdb
+
+clip_image002[10][root@centos cdrom]# yum --disablerepo =*
+
+
+
+
+
+
+在使用yum进行install时，经常会出现下面的错误
+warning: rpmts_HdrFromFdno: Header V3 DSA signature: NOKEY, key ID 1ac70ce6
+导致安装不能进行。解决方法如下：
+[root@localhost CentOS]# rpm --import   /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5
+[root@localhost CentOS]# rpm --import   [[/etc/pki/rpm-gpg/RPM-GPG-KEY-beta]]
+
+
+
+
+
+[root@localhost ~]# ls -l /etc/yum.repos.d/
+-rw-r--r--. 1 root root 1926 Jun 26 17:29 CentOS-Base.repo
+-rw-r--r--. 1 root root  637 Jun 26 17:29 CentOS-Debuginfo.repo
+-rw-r--r--  1 root root  628 Nov 29 09:55 CentOS-Media.repo
+-rw-r--r--. 1 root root 2593 Jun 26 17:29 CentOS-Vault.repo
+
+4、禁用yum的网络更新方式，简单地将默认首选的CentOS-Base.repo改名为CentOS-Base.repo.bak即可
+
+[root@localhost yum.repos.d]# mv CentOS-Base.repo CentOS-Base.repo.bak
+
+5、配置本地yum源
+
+[root@localhost ~]# vim /etc/yum.repos.d/CentOS-Media.repo
+
+
+
+将
+
+[c6-media]
+name=CentOS-$releasever - Media
+baseurl=file:///media/CentOS/
+file:///media/cdrom/
+file:///media/cdrecorder/
+gpgcheck=1
+enabled=0
+
+修改为
+
+[c6-media]
+name=CentOS-$releasever - Media
+baseurl=file:///media/CentOS/
+gpgcheck=1
+enabled=1
+
+
+其中baseurl修改为DVD的挂载目录，enabled=1开启本地更新模式
+
+:wq 保存退出
+
+6、清除原有的yum信息
+
+[root@localhost ~]# yum clean all
+Loaded plugins: fastestmirror
+Cleaning up Everything
+
+7、检查DVD软件列表
+
+[root@localhost yum.repos.d]# yum list
+Loaded plugins: fastestmirror
+Determining fastest mirrors
+c6-media                                                 | 3.7 kB     00:00 ...
+c6-media/primary_db                                      | 3.3 MB     00:00 ...
+
+这样以后就默认使用DVD安装软件了
+
+
+
+
+
+
+
+根据网络上的方法进行测试并整理：
+
+
+环境：CentOS
+
+1、为DVD创建一个挂载目录
+
+
+[root@localhost ~]# mkdir /media/CentOS
+
+2、在Linux下挂载CentOS DVD
+
+
+[root@localhost ~]# mount -t auto /dev/cdrom /media/CentOS
+
+3、查看相关配置文件，目录为
+
+[root@localhost ~]# ls -l /etc/yum.repos.d/
+-rw-r--r--. 1 root root 1926 Jun 26 17:29 CentOS-Base.repo
+-rw-r--r--. 1 root root  637 Jun 26 17:29 CentOS-Debuginfo.repo
+-rw-r--r--  1 root root  628 Nov 29 09:55 CentOS-Media.repo
+-rw-r--r--. 1 root root 2593 Jun 26 17:29 CentOS-Vault.repo
+
+4、禁用yum的网络更新方式，简单地将默认首选的CentOS-Base.repo改名为CentOS-Base.repo.bak即可
+
+[root@localhost yum.repos.d]# mv CentOS-Base.repo CentOS-Base.repo.bak
+
+5、配置本地yum源
+
+[root@localhost ~]# vim /etc/yum.repos.d/CentOS-Media.repo
+
+将
+
+[c6-media]
+name=CentOS-$releasever - Media
+baseurl=file:///media/CentOS/
+file:///media/cdrom/
+file:///media/cdrecorder/
+gpgcheck=1
+enabled=0
+
+修改为
+
+[c6-media]
+name=CentOS-$releasever - Media
+baseurl=file:///media/CentOS/
+gpgcheck=1
+enabled=1
+
+其中baseurl修改为DVD的挂载目录，enabled=1开启本地更新模式
+
+:wq 保存退出
+
+6、清除原有的yum信息
+
+[root@localhost ~]# yum clean all
+Loaded plugins: fastestmirror
+Cleaning up Everything
+
+7、检查DVD软件列表
+
+[root@localhost yum.repos.d]# yum list
+Loaded plugins: fastestmirror
+Determining fastest mirrors
+c6-media                                                 | 3.7 kB     00:00 ...
+c6-media/primary_db                                      | 3.3 MB     00:00 ...
+
+这样以后就默认使用DVD安装软件了
+
+8.恢复网络安装模式，将 CentOS-Base.repo.bak 更名还原，并将enabled=0关闭本地更新模式
+再次执行：
+[root@localhost ~]# yum clean all
+[root@localhost yum.repos.d]# yum list
+
+PS.每次重启系统后需要手工挂载DVD到/media/CentOS/，如果嫌麻烦可以自己写脚本自动挂载。
+
+
+
+
+
+
+
+
