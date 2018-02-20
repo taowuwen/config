@@ -14,7 +14,7 @@ main()
 		;;
 		start|reload|restart)
 			_do_stop
-			mpd /home/tww/usr/etc/mpd.conf &>/tmp/mpd.error
+			mpd /home/tww/usr/etc/mpd.conf --stderr &>/tmp/mpd.error
 		;;
 		*)
 	esac
