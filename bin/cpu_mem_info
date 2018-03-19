@@ -7,6 +7,6 @@ from py_bin.meminfo  import meminfo
 cpu = cpuinfo()
 mem = meminfo(lambda:0)
 
-print("cpu: {}% mem: {:<3.2f}%".format(cpu.usage, mem.usage))
+print("cpu: {}% mem: {:<3.2f}%".format(cpu.usage, mem.usage), end="")
 
 

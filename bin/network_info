@@ -15,4 +15,4 @@ print("{inf} {ip} {rx: >7.7s} ↓ {tx:>7.7s} ↑".format(
 	mask=net.int2ip(mask),
 	gateway=net.int2ip(gateway),
 	rx=net.speed_str(rx),
-	tx=net.speed_str(tx)));
+	tx=net.speed_str(tx)), end="");
