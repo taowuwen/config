@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+addr="`echo $0 | cut -d'_' -f2-`"
+
+
+ssh -l tww $* "$addr"
+#sshpass -p icedcoffee198786 ssh -l root 209.141.33.9
+
