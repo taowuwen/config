@@ -11,12 +11,12 @@ start_vm()
 		-localtime \
 		-enable-kvm \
 		-cpu host \
-		-hda $ROOT/winxp/winxp.img \
+		-hda $ROOT/debian/debian.img \
 		-m 1G \
 		-net nic,vlan=0 \
 		-net tap,ifname=$TAP,script=no,downscript=no \
 		-monitor stdio \
-		-name "win xp"\
+		-name "debian linux"\
 		"$@"
 }
 

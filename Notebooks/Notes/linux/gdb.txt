@@ -1,0 +1,45 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-05-20T19:48:22+08:00
+
+====== gdb ======
+Created Sunday 20 May 2018
+
+
+(gdb) p "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+$6 = 'a' <repeats 30 times>
+(gdb) set print repeats 0
+(gdb) p "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+$7 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+(gdb) set print repeats 10
+(gdb) p "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+$8 = 'a' <repeats 30 times>
+
+
+
+
+
+
+
+Your memory address 0xbffff880 is most likely non-executable, but only read/write. There are a couple of ways you can overcome this.
+
+	If that is a stack address you can use -z execstack while compiling. This will essentially make the entire stack memory executable.
+	For a more robust solution you can write the shellcode to call mprotect on the address you are writing to.
+
+For example, the following line will mark address 0xbffff880 as read/write/executable.
+
+mprotect((void*) 0xbffff880, buffer_len, PROT_READ | PROT_WRITE | PROT_EXEC);
+
+-fno-stack-protector does not mean that the stack will be executable. It means that canaries or stack cookies will be used to protect the stack. If these values are overwritten (with a buffer overflow) when they are checked the program will fail. This would not enable the execution of your buffer.
+
+
+
+-Wl,-z,norelro
+
+
+gcc test.c -z execstack -z norelro -fno-stack-protector -D_FORTIFY_SOURCE=0 -ggdb
+
+
+
+sysctl -w kernel.randomize_va_space=0
+gcc test.c -z execstack -z norelro -fno-stack-protector -D_FORTIFY_SOURCE=0 -ggdb -o test

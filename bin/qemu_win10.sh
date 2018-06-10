@@ -11,12 +11,12 @@ start_vm()
 		-localtime \
 		-enable-kvm \
 		-cpu host \
-		-hda $ROOT/winxp/winxp.img \
-		-m 1G \
+		-hda $ROOT/win10/win10.img \
+		-m 4G \
 		-net nic,vlan=0 \
 		-net tap,ifname=$TAP,script=no,downscript=no \
 		-monitor stdio \
-		-name "win xp"\
+		-name "win10"\
 		"$@"
 }
 
