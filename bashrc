@@ -33,7 +33,7 @@ alias 'h=history'
 export HISTFILE="/tmp/.bash_history"
 
 
-alias 'scrot=scrot -s'
+alias "scrot=scrot s"
 
 
 #export TERM=linux
