@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-addr="`echo $0 | cut -d'_' -f2-`"
+dir=`dirname $0`
 
 
-ssh -l tww $* "$addr"
-#sshpass -p icedcoffee198786 ssh -l root 209.141.33.9
+addr="`echo $0 | sed 's|'$dir'/||g' | cut -d'_' -f2-`"
+
+[ $addr == "209.141.45.215" ] && {
+	sshpass -p icedcoffee198786 ssh -l root $addr 
+	exit $?
+} || {
+	ssh -l tww $* "$addr"
+	exit $?
+}
 
