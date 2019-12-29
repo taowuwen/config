@@ -32,6 +32,18 @@ class Color:
     yellow = "\033[1;33m"
     normal = "\033[1;00m"
 
+    @classmethod
+    def valid(cls, color):
+
+        for c in dir(cls):
+            if c.startswith('_'):
+                continue
+
+            if color is getattr(cls, c):
+                return True
+
+        return False
+
 
 def paint_substr(color, ln_str, sub_str):
 
@@ -71,7 +83,21 @@ def paint_substr_ignorecase(color, ln_str, sub_str):
         pos += l_sub_str
 
     return ln
-    
+
+
+def paint_str(color, ln_str):
+
+    if Color.valid(color):
+        return color + ln_str + Color.normal
+
+    return ln_str
+
+
+print_err    = lambda x: print(paint_str(Color.red,    x))
+print_info   = lambda x: print(paint_str(Color.blue,   x))
+print_dbg    = lambda x: print(paint_str(Color.normal, x))
+print_warn   = lambda x: print(paint_str(Color.yellow, x))
+print_notice = lambda x: print(paint_str(Color.green,  x))
 
 if __name__ == '__main__':
 
@@ -93,5 +119,13 @@ if __name__ == '__main__':
     print(paint_substr_ignorecase(Color.yellow, ln, "world"))
     print(paint_substr_ignorecase(Color.blue, ln, "no"))
     print(paint_substr_ignorecase(Color.yellow, ln, "lo"))
+
+    print(paint_str(Color.green, ln))
+
+    print_err(ln)
+    print_info(ln)
+    print_dbg(ln)
+    print_warn(ln)
+    print_notice(ln)
 
 
