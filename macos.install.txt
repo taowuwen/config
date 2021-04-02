@@ -1,0 +1,38 @@
+、要保证下载的原版安装包 Install OS X .app在“应用程序”文件夹中
+
+2、一个大于等于8G的U盘，用磁盘工具分成一个分区，
+
+U盘格式和名称：
+
+GUID分区表；
+
+Mac OS X 扩展（日志式）；
+
+分区名称：OSX（这个可以自定，不过下面终端命令中的OSX也要改成你自定义的同样的名称）
+
+开始制作：
+
+1、打开终端（在实用工具文件夹中）
+
+2、输入下面的命令（注意空格，最好是复制粘贴）：
+
+sudo /Applications/Install\ macOS\ High\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/OSX --applicationpath /Applications/Install\ macOS\ High\ Sierra.app --nointeraction
+
+3、输入后按回车后，会提示要输入你的系统密码（输入密码时是看不见的）
+
+4、输入完成后回车，终端会开始执行命令，等待完成即可。
+
+关于安装是出现关于出现“不能验证”错误：
+
+解决办法 :打开终端 在"终端"里面修改时间
+
+输入：date 032208102015.20
+
+
+
+https://mirrors.dpops.cc/ios/MacOS/daliansky_macos/10.13
+
+
+
+smc.present = "TRUE"
+smc.version = 0
