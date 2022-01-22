@@ -85,7 +85,6 @@ _create_tap()
 	do
 		echo "creating tun: $tap..."
 		ip tuntap add dev $tap mode tap group $GROUP || return 1
-#tunctl -t $tap -g $GROUP -u tww || return 1
 		ip link set dev $tap up || return 1
 	done
 
@@ -98,6 +97,7 @@ _del_tap()
 	do
 		echo "destroying tun: $tap..."
 		ip link set dev $tap down
+        ip tuntap del mode tap $tap
 		tunctl -d $tap
 	done
 }
